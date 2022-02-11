@@ -16,9 +16,11 @@ function Home() {
 
   return (
     <div className="container">
-      <h1>Home</h1>
-      <Calendar onSelectDay={onSelectDay}/>
-      <List list={list} />
+      <div className='row'>
+        <h1>Home</h1>
+        <Calendar list={list} onSelectDay={onSelectDay}/>
+        <List list={list} />
+      </div>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import {Calendar as Cal} from 'react-calendar';
+import {Calendar as Cal } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import '../index.css';
 
 
-function Calendar({ onSelectDay }){
+function Calendar({ onSelectDay, list }){
   const [selectedDates, setSelectedDates] = useState(new Date());
 
   const handleSelection = (date) => {
@@ -12,13 +13,12 @@ function Calendar({ onSelectDay }){
   };
 
   return (
-    <div className='container'>
+    <div className='mb-4 col-lg-6 justify-center align-center'>
       <h1>Calendar</h1>
       <Cal 
         value={selectedDates} 
-        defaultValue={'2-10-2022'}
         onClickDay={handleSelection}
-         />
+      />
     </div>
   );
 }

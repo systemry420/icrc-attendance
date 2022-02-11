@@ -29,3 +29,7 @@ input[type="submit"] {
 input[type="submit"]:hover, input[type="submit"]:active {
   background-color: #f55;
 }
+
+.myClassName {
+  background-color: #f55;
+}
