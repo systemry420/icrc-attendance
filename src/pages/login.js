@@ -15,7 +15,7 @@ const Login = () => {
   }
   
   return (
-    <div className="container  m-4 py-4">
+    <div className="container">
       <div className="fill-form form-box">
       <h1>Title</h1>
         <form className="col-lg-6 col-md-6 col-sm-12">
