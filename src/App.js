@@ -1,11 +1,11 @@
 import './index.css';
-import Home from './pages/home';
-import Table from './pages/Table';
+import Form from './pages/admin/Team';
+import Team from './pages/admin/Team';
 
 function App() {
   return (
     <div className="container">
-      <Table />
+      <Form />
     </div>
   );
 }

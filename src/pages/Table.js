@@ -2,8 +2,11 @@ import React from 'react'
 
 function Table() {
   return (
-    <div className='p-2'>
-      <h1>Table</h1>
+    <div className="p-2">
+      <div className="row">
+        <h1 className='col-6'>Table</h1>
+        <input className='col-6' type='button' value='Download' />
+      </div>
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -21,7 +24,7 @@ function Table() {
             </tr>
           </thead>
           <tbody>
-          <tr>
+            <tr>
               <td>Person 1</td>
               <td>Person 2</td>
               <td>Person 3</td>
