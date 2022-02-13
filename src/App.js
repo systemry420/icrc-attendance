@@ -1,12 +1,19 @@
+import Navbar from './components/Navbar';
 import './index.css';
-import Form from './pages/admin/Team';
-import Team from './pages/admin/Team';
+import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom'
+import Home from './pages/home';
 
 function App() {
   return (
-    <div className="container">
-      <Form />
-    </div>
+    <>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route exact path='/' 
+            element={<Home />}></Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 

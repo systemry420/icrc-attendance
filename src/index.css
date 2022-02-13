@@ -1,3 +1,8 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -21,13 +26,13 @@ input {
   width: 90%;
 }
 
-input[type="submit"], button, input[type="button"] {
+input[type="submit"], .button, input[type="button"] {
   background-color: #db1021;
   color: #fff;
 }
 
 input[type="submit"]:hover, 
-button:hover,
+.button:hover,
 input[type="button"]:hover, 
 input[type="submit"]:active {
   background-color: #d55;
@@ -36,3 +41,42 @@ input[type="submit"]:active {
 .myClassName {
   background-color: #d55;
 }
+
+nav {
+  box-shadow: 0 0 6px 4px #999;
+  margin-bottom: 10px;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+}
+
+nav ul li {
+  text-transform: uppercase;
+  color: #222;
+}
+
+nav ul li .navlink {
+  color: #db1021;
+  padding: .5em 1em;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: .9em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  height: 60px;
+}
+
+.navlink:hover, .navlink:active {
+  background-color: #db1021;
+  color: #fff;
+  cursor: pointer;
+}
+
+
