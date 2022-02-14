@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import './index.css';
 import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom'
@@ -7,6 +7,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore"; 
+import Login from './pages/Login';
+import Team from './pages/admin/Team';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
@@ -24,6 +26,7 @@ const analytics = getAnalytics(app);
 const db = getFirestore();
 
 function App() {
+  const [schedule, setSchedule] = useState([]);
 
   const read = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -37,15 +40,18 @@ function App() {
     return () => {
       // cleanup
     };
-  }, []);
+  }, [schedule]);
 
   return (
     <>
       <Router>
-        <Navbar />
         <Routes>
           <Route exact path='/' 
             element={<Home />}></Route>
+          <Route path='/login' 
+            element={<Login />}></Route>
+          <Route path='/team' 
+            element={<Team />}></Route>
         </Routes>
       </Router>
     </>

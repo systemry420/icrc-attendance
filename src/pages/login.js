@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Navbar from "../components/Navbar";
 import '../index.css';
 
 
@@ -15,7 +16,9 @@ const Login = () => {
   }
   
   return (
-    <div className="container">
+    <>
+      <Navbar />
+      <div className="container">
       <div className="fill-form form-box">
       <h1>Title</h1>
         <form className="col-lg-6 col-md-6 col-sm-12">
@@ -47,6 +50,7 @@ const Login = () => {
 
       </div>
     </div>
+    </>
   );
 }
 

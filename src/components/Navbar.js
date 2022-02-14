@@ -1,14 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Navbar({ }) {
-    const pages = [
-        'home', 'schedule', 'jjj'
-    ]
+function Navbar({ pages = [] }) {
+  
   return (
     <nav>
       <ul>
-        {pages.map((page) => {
+        {pages.length > 0 && pages.map((page) => {
           return(
             <li style={{'width': `calc(100% / ${pages.length}`}} key={page}>
                 <Link className='navlink' to={`/${page}`}>

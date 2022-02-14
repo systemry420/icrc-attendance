@@ -51,6 +51,7 @@ nav ul {
   list-style-type: none;
   display: flex;
   padding: 0;
+  height: 60px;
 }
 
 nav ul li {
@@ -70,7 +71,6 @@ nav ul li .navlink {
   font-size: .9em;
   font-weight: 700;
   letter-spacing: 1px;
-  height: 60px;
 }
 
 .navlink:hover, .navlink:active {
