@@ -71,6 +71,7 @@ nav ul li .navlink {
   font-size: .9em;
   font-weight: 700;
   letter-spacing: 1px;
+  height: 100%;
 }
 
 .navlink:hover, .navlink:active {

@@ -1,15 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import List from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
+import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { db } from '../../App'
+
 function Team() {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
 
-  const addMember = (member) => {
-    setTeamList([...teamList, member])
-    console.log(teamList);
+  const addMember = async (member) => {
+    try {
+      const docRef = await addDoc(collection(db, "users"), member);
+      console.log("Document written with ID: ", docRef.id);
+      // setTeamList([...teamList, {...member, id: docRef.id}])
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
+
+  const readTeam = async () => {
+    const list = [];
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      const member = { id: doc.id, data: doc.data() }
+      list.push(member)
+    });
+    setTeamList(list)
+  }
+
+  const removeMember = (id) => {
+    console.log(id);
+  }
+
+  useEffect(() => {
+    readTeam()
+    return () => {
+    };
+  }, []);
 
   return (
     <>
@@ -39,11 +67,14 @@ function Team() {
           </div>
           {
             showForm ? (
-              <Form className='col-6' addMember={addMember} />
+              <Form addMember={addMember} />
             ) : ('')
           }
 
-          <List className='col-6' teamList={teamList} />
+          <List 
+            removeMember={removeMember} 
+            className='col-6' 
+            teamList={teamList} />
         </div>
       </div>
     </div>

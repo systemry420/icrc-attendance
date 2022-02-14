@@ -1,4 +1,4 @@
-const List = ({ teamList = []}) => {
+const List = ({ teamList = [], removeMember }) => {
   return (
     <div className="col-lg-6 col-md-6 col-sm-12">
       <hr style={{ margin: "1em" }} />
@@ -9,10 +9,12 @@ const List = ({ teamList = []}) => {
             return (
               <li
                 className="py-3 list-group-item d-flex justify-content-between"
-                key={idx}
+                key={member.id}
               >
-                {member.name}
-                <span className="remove-btn text-danger">X</span>
+                {member.data.name} - {member.data.phone}
+                <span 
+                  onClick={()=> removeMember(member.id)}
+                  className="remove-btn text-danger">X</span>
               </li>
             );
           })}
