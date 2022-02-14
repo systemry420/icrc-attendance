@@ -12,7 +12,7 @@ function List({ list }) {
                     className="py-3 list-group-item d-flex justify-content-between" 
                     key={idx}>
                   {day}
-                  <span className='text-danger'>X</span>
+                  <span className='remove-btn text-danger'>X</span>
                 </li>
               );
             })}

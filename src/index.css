@@ -79,4 +79,8 @@ nav ul li .navlink {
   cursor: pointer;
 }
 
-
+.remove-btn {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.25em;
+}

@@ -100,7 +100,7 @@ const List = ({ teamList }) => {
                     className="py-3 list-group-item d-flex justify-content-between" 
                     key={idx}>
                   {member.name}
-                  <span className='text-danger'>X</span>
+                  <span className='remove-btn text-danger'>X</span>
                 </li>
               );
             })}

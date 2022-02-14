@@ -13,8 +13,8 @@ function Calendar({ onSelectDay, list }){
   };
 
   return (
-    <div className='mb-4 col-lg-6 justify-center align-center'>
-      <h1>Calendar</h1>
+    <div className='mt-1 mb-4 col-lg-6 justify-center align-center'>
+      {/* <h1>Calendar</h1> */}
       <Cal 
         value={selectedDates} 
         onClickDay={handleSelection}

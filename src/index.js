@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from './components/Navbar';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <App />
