@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import List from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
-import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { 
+  collection, 
+  addDoc, 
+  getDocs, 
+  deleteDoc, doc } from "firebase/firestore"; 
 import { db } from '../../App'
 
 function Team() {
@@ -30,7 +34,15 @@ function Team() {
   }
 
   const removeMember = (id) => {
-    console.log(id);
+    console.log(db.collection('users').doc(id));
+    try {
+      db.collection('users').doc(id).delete()
+        .then(() => {
+          console.log('deleted');
+        })
+    } catch (e) {
+
+    }
   }
 
   useEffect(() => {

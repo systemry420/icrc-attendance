@@ -9,6 +9,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore"; 
 import Login from './pages/Login';
 import Team from './pages/admin/Team';
+import Table from './pages/admin/Table';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
@@ -28,20 +29,6 @@ export const db = getFirestore();
 function App() {
   const [schedule, setSchedule] = useState([]);
 
-  const read = async () => {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => ${doc.data()}`);
-    });
-  }
-
-  useEffect(() => {
-    read()
-    return () => {
-      // cleanup
-    };
-  }, [schedule]);
-
   return (
     <>
       <Router>
@@ -52,6 +39,8 @@ function App() {
             element={<Login />}></Route>
           <Route path='/team' 
             element={<Team />}></Route>
+          <Route path='/table'
+            element={<Table />}></Route>
         </Routes>
       </Router>
     </>
