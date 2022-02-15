@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, collectionGroup, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
@@ -7,12 +7,19 @@ function Table() {
 
   const readList = async () => {
     const list = [];
-    const querySnapshot = await getDocs(collection(db, 'users'))
-    querySnapshot.forEach(doc => {
-      const member = { id: doc.id, data: doc.data() }
+    const usersQuery = await getDocs(collection(db, 'users'))
+    usersQuery.forEach(async doc => {
+      const member = { id: doc.id, data: doc.data() };
+        // console.log(member);
       list.push(member)
     })
     setTeamList(list)
+
+    const scheduleQuery = collection(db, 'schedule/2_2022/u1')
+    const querySnapshot = await getDocs(scheduleQuery);
+    querySnapshot.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data());
+    });
   }
 
   useEffect(() => {

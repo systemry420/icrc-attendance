@@ -1,8 +1,9 @@
-import { setLogLevel } from 'firebase/firestore';
 import React, { useState } from 'react'
 import Calendar from '../components/Calendar';
 import List from '../components/List';
 import Navbar from '../components/Navbar';
+import { addDoc, collection, setDoc, doc } from "firebase/firestore";
+import { db } from '../App'
 
 function Home() {
   const pages = [
@@ -32,8 +33,28 @@ function Home() {
     setList(removed)
   }
 
-  const saveSchedule = () => {
-    console.log('fire');
+  const saveSchedule = async () => {
+    if (list.length === 0) {
+      return;
+    }
+    const obj = Object.assign({}, list)
+    
+    console.log(obj);
+    try {
+      // grab month and user id 
+      const scheduleRef = collection(db, 'schedule');
+
+      const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
+      setDoc(doc(scheduleRef, monthID + '/' + 'u2/u2'),
+         {id: 'u1', data: obj})
+        .then((doc) => {
+          console.log('added', doc);
+        })
+
+        // disable button
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
   return (
