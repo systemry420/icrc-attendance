@@ -1,3 +1,4 @@
+import { setLogLevel } from 'firebase/firestore';
 import React, { useState } from 'react'
 import Calendar from '../components/Calendar';
 import List from '../components/List';
@@ -25,13 +26,23 @@ function Home() {
     console.log(list);
   }
 
+  const removeDate = (id) => {
+    // TODO: alert
+    const removed = list.filter(d => d.id !== id);
+    setList(removed)
+  }
+
+  const saveSchedule = () => {
+    console.log('fire');
+  }
+
   return (
     <>
       <Navbar pages={pages} />
       <div className="container">
         <div className='row'>
           <Calendar list={list} onSelectDay={onSelectDay}/>
-          <List list={list} />
+          <List list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>
       </div>
     </>
