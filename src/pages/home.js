@@ -12,10 +12,17 @@ function Home() {
   const onSelectDay = (day) => {
     const selectedDay = new Date(day).toString();
     const formattedDay = selectedDay.substring(0, selectedDay.indexOf('00'))
-    console.log(
-      formattedDay
-    );
-    setList([...list, formattedDay])
+
+    const selectedDate = { id: new Date(formattedDay).getTime(), day: formattedDay}
+
+    for (let i = 0; i < list.length; i++) {
+      const element = list[i];
+      if (element.id === selectedDate.id) {
+        return;
+      }
+    }
+    setList([...list, selectedDate])
+    console.log(list);
   }
 
   return (

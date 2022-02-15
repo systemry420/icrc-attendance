@@ -10,8 +10,8 @@ function List({ list }) {
               return (
                 <li 
                     className="py-3 list-group-item d-flex justify-content-between" 
-                    key={idx}>
-                  {day}
+                    key={day.id}>
+                  {day.day}
                   <span className='remove-btn text-danger'>X</span>
                 </li>
               );

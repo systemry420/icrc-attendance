@@ -62,6 +62,7 @@ function Team() {
           </div>
           <div className="col-4">
             <button 
+              className="button"
               onClick={() => setShowForm(!showForm)}
               style={{
                 'fontSize': '2em',
