@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import { Link } from 'react-router-dom';
 import logo from '../images/logo.png'
+import { LanguageReducer, languageState } from '../reducers/Language';
 
 function Navbar({ pages = [] }) {
+
+  const [state, dispatch] = useReducer(LanguageReducer, languageState)
+
+  const switchLanguage = () => {
+    dispatch({type: 'SWITCH_LANGUAGE'})
+  }
   
   return (
     <nav>
@@ -17,6 +24,7 @@ function Navbar({ pages = [] }) {
             </li>
           )
         })}
+        <span onClick={switchLanguage}>EN/AR</span>
       </ul>
     </nav>
   );
