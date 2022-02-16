@@ -1,4 +1,4 @@
-import { collection, collectionGroup, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
@@ -33,8 +33,8 @@ function Table() {
       <Navbar />
      <div className="p-3">
       <div className="row p-2">
-        <h1 className='col-5'>Table</h1>
-        <input className='col-5' type='button' value='Download' />
+        <h1 className='col-6'>Table</h1>
+        <input className='col-4' type='button' value='Download' />
       </div>
       <div className="table-responsive p-2">
         <table className="table p-2">
