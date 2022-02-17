@@ -1,69 +1,71 @@
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore';
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
 function Table() {
   const [teamList, setTeamList] = useState([]);
+  const [datesList, setDatesList] = useState([]);
 
   const readList = async () => {
-    const list = [];
+    setTeamList([])
+    const list = [], fullList = [];
     const usersQuery = await getDocs(collection(db, 'users'))
     usersQuery.forEach(async doc => {
       const member = { id: doc.id, data: doc.data() };
-        // console.log(member);
       list.push(member)
     })
     setTeamList(list)
+  }
 
-    const scheduleQuery = collection(db, 'schedule/2_2022/u1')
-    const querySnapshot = await getDocs(scheduleQuery);
-    querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-    });
+  const readSchedule = async (user = {code: 'LRC1'}) => {
+    setDatesList([])
+    const query = await getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
+    console.log(query.data()['data']);
+    const dates = Object.keys(query.data()['data']).map(key => {
+      return query.data()['data'][key]
+    })
+    setDatesList([...datesList, {
+      user, dates
+    }])
+
+    console.log(datesList);
   }
 
   useEffect(() => {
     readList();
+    readSchedule()
     return () => {
+      setTeamList([])
+      setDatesList([])
     };
   }, []);
 
   return (
    <>
       <Navbar />
-     <div className="p-3">
+     <div className="container p-3">
       <div className="row p-2">
         <h1 className='col-6'>Table</h1>
         <input className='col-4' type='button' value='Download' />
       </div>
       <div className="table-responsive p-2">
-        <table className="table p-2">
+        <table className="table table-stripped p-2">
           <thead>
-            <tr>
-              {teamList.length > 0 && teamList.map(member => {
-                return (
-                  <td key={member.id}>
-                    {member.data.name}
-                  </td>
-                )
-              })}
-            </tr>
+            {datesList.length > 0 && datesList.map(data => {
+              return (
+                <tr key={data.user.code}>
+                  <th>
+                    {data.user.code}
+                  </th>
+                  {data.dates.length > 0 && data.dates.map((date, idx) => {
+                      return (
+                        <td key={date.id}>{date.day + date.day}</td>
+                      )
+                  })}
+                </tr>
+              )
+            })}
           </thead>
-          <tbody>
-            <tr>
-              <td>
-                <ul>
-                  <li>Day 1</li>
-                  <li>Day 1</li>
-                  <li>Day 1</li>
-                </ul>
-              </td>
-              <td>Day 2</td>
-              <td>Day 3</td>
-              <td>Day 4</td>
-              <td>Day 4</td>
-            </tr>
-          </tbody>
         </table>
       </div>
     </div>

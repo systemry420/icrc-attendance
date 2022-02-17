@@ -22,13 +22,6 @@ function Home() {
       }
     }
     setList([...list, selectedDate])
-    console.log(list);
-  }
-
-  function formatDate(day) {
-    const selectedDay = new Date(day).toString();
-    const formattedDay = selectedDay.substring(0, selectedDay.indexOf('00'))
-    return { id: new Date(formattedDay).getTime(), day: formattedDay}
   }
 
   const removeDate = (id) => {
@@ -42,18 +35,14 @@ function Home() {
       return;
     }
     const obj = Object.assign({}, list)
-    
-    console.log(obj);
     try {
-      // grab month and user id 
+      // grab month from CAL
       const scheduleRef = collection(db, 'schedule');
-
       setDoc(doc(scheduleRef, monthID + `/${user.code}/${user.code}`),
          { data: obj})
         .then((doc) => {
           console.log('added', doc);
         })
-
         // disable button
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -65,11 +54,10 @@ function Home() {
     setUser(member)
     const daysList = []
     try {
-      const scheduleQuery = collection(db, `schedule/2_2022/${member.code}`)
+      const scheduleQuery = collection(db, `schedule/${monthID}/${member.code}`)
       const querySnapshot = await getDocs(scheduleQuery);
       querySnapshot.forEach((doc) => {
           const obj = doc.data()['data']
-          console.log(obj);
           Object.keys(obj).forEach(d => {
             daysList.push(obj[d])
           })
@@ -87,6 +75,12 @@ function Home() {
     return () => {
     };
   }, []);
+
+  function formatDate(day) {
+    const selectedDay = new Date(day).toString();
+    const formattedDay = selectedDay.substring(0, selectedDay.indexOf('00'))
+    return { id: new Date(formattedDay).getTime(), day: formattedDay}
+  }
 
   return (
     <>
