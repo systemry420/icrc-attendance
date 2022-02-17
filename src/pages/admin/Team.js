@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import List from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
@@ -73,14 +73,15 @@ function Team() {
                 'alignItems': 'center',
                 'alignContent': 'center',
                 'verticalAlign': 'middle',
-                'borderRadius': '50%'
+                'borderRadius': '50%',
+                'outline': 'none'
                 }}>
                   <span  style={{'height': '0', 'padding': '0'}}>+</span> 
                 </button>
           </div>
           {
             showForm ? (
-              <Form addMember={addMember} />
+              <Form id={teamList.length} addMember={addMember} />
             ) : ('')
           }
 

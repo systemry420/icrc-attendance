@@ -1,19 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getDocs, collection } from 'firebase/firestore'
+import { db } from '../App'
 import Navbar from "../components/Navbar";
 import '../index.css';
+import { useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-
+  const [team, setTeam] = useState([])
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(name, password);
+    for (let i = 0; i < team.length; i++) {
+      const member = team[i]['data'];
+      if (member.code === name && member.password === password) {
+        navigate('/')
+        break;
+      }
+      else {
+        alert('error')
+      }
+    }
+    
     setName('')
     setPassword('')
   }
+
+  const readTeam = async () => {
+    const list = [];
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      const member = {data: doc.data()}
+      list.push(member)
+    });
+    setTeam(list)
+  }
+
+  useEffect(() => {
+    readTeam()
+    return () => {
+    };
+  }, []);
   
   return (
     <>
@@ -31,6 +61,7 @@ const Login = () => {
                 onChange={(e) => setName(e.target.value)}
                 type='text' />
             </div>
+
             <div className="mt-4">
               <input
                 id="password"

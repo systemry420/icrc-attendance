@@ -1,13 +1,14 @@
 import { useState } from 'react'
 
-const Form = ({ addMember }) => {
+const Form = ({ id, addMember }) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
+    const code = `LRC${id + 1}`
   
     const handleSubmit = (e) => {
       e.preventDefault()
       if (name && phone) {
-        const member = {name, phone};
+        const member = {code, name, phone, password: '123456'};
         addMember(member);
         setName('')
         setPhone('')
@@ -18,6 +19,14 @@ const Form = ({ addMember }) => {
   
     return (
       <form className="col-lg-6 col-md-6 col-sm-12">
+      <div className="mt-4">
+        <input
+          id="id"
+          autoComplete="false"
+          value={code}
+          disabled={true}
+        />
+      </div>
       <div className="mt-4">
         <input
           id="name"

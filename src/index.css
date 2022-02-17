@@ -22,7 +22,7 @@ input, .button {
   border: none;
   box-shadow: 0 0 4px 1px #aaa;
   border-radius: 50px;
-  padding: 0em 1em;
+  padding: 0.5em 1em;
   width: 90%;
 }
 
