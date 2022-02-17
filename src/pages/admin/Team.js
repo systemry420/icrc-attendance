@@ -15,7 +15,7 @@ function Team() {
 
   const addMember = async (member) => {
     try {
-      const docRef = await addDoc(collection(db, "users"), member);
+      const docRef = await addDoc(collection(db, `users`), member);
       console.log("Document written with ID: ", docRef.id);
       // setTeamList([...teamList, {...member, id: docRef.id}])
     } catch (e) {

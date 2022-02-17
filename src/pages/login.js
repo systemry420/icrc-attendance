@@ -18,6 +18,8 @@ const Login = () => {
       const member = team[i]['data'];
       if (member.code === name && member.password === password) {
         navigate('/')
+        localStorage.setItem('user', JSON.stringify(member))
+        // save to localstorage
         break;
       }
       else {
