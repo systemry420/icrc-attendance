@@ -23,6 +23,21 @@ function Team() {
     }
   };
 
+  const removeMember = async (id) => {
+    try {
+      deleteDoc(doc(db, `users`, id)).then(() => {
+        console.log('deleted');
+      })
+    } catch (e) {
+    }
+  }
+
+  useEffect(() => {
+    readTeam()
+    return () => {
+    };
+  }, [teamList]);
+
   const readTeam = async () => {
     const list = [];
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -32,24 +47,6 @@ function Team() {
     });
     setTeamList(list)
   }
-
-  const removeMember = (id) => {
-    console.log(db.collection('users').doc(id));
-    try {
-      db.collection('users').doc(id).delete()
-        .then(() => {
-          console.log('deleted');
-        })
-    } catch (e) {
-
-    }
-  }
-
-  useEffect(() => {
-    readTeam()
-    return () => {
-    };
-  }, []);
 
   return (
     <>

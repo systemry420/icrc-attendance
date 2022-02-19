@@ -8,27 +8,33 @@ function Table() {
 
   const readList = async () => {
     setTeamList([])
-    const list = [], fullList = [];
+    const list = [];
     const usersQuery = await getDocs(collection(db, 'users'))
     usersQuery.forEach(async doc => {
-      const member = { id: doc.id, data: doc.data() };
+      const member = { id: doc.id, ...doc.data() };
       list.push(member)
     })
+    // console.log(list);
     setTeamList(list)
   }
 
-  const readSchedule = async (user = {code: 'LRC1'}) => {
+  const readSchedule = async () => {
     setDatesList([])
-    const query = await getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
-    console.log(query.data()['data']);
-    const dates = Object.keys(query.data()['data']).map(key => {
-      return query.data()['data'][key]
+    teamList.forEach((user) => {
+      console.log(user);
+      getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
+      .then(query => {
+        console.log(query.data()['data']);
+        const dates = Object.keys(query.data()['data']).map(key => {
+          return query.data()['data'][key] 
+        })
+        setDatesList(prev => {
+          return [...prev, {
+            user, dates
+          }]
+        })
+      })
     })
-    setDatesList([...datesList, {
-      user, dates
-    }])
-
-    console.log(datesList);
   }
 
   useEffect(() => {
@@ -40,6 +46,24 @@ function Table() {
     };
   }, []);
 
+  let team = datesList.length && datesList.map(obj => {
+    const { user, dates } = obj;
+    let userJSX = <th>{user.code}</th>
+    return(
+      <tr key={user.name}>
+        {userJSX}
+        {dates.map(date => {
+          return (
+            <td key={date.id}>{date.day}</td>
+          )
+        })}  
+      </tr>
+    )
+  })
+
+
+  console.log(team);
+
   return (
    <>
       <Navbar />
@@ -48,24 +72,18 @@ function Table() {
         <h1 className='col-6'>Table</h1>
         <input className='col-4' type='button' value='Download' />
       </div>
-      <div className="table-responsive p-2">
-        <table className="table table-stripped p-2">
+      <div className="table-responsive-sm p-2">
+        <table className="table table-striped table-bordered p-2">
           <thead>
-            {datesList.length > 0 && datesList.map(data => {
-              return (
-                <tr key={data.user.code}>
-                  <th>
-                    {data.user.code}
-                  </th>
-                  {data.dates.length > 0 && data.dates.map((date, idx) => {
-                      return (
-                        <td key={date.id}>{date.day + date.day}</td>
-                      )
-                  })}
-                </tr>
-              )
-            })}
+            <tr>
+              <th>Name</th>
+              <th>Dates</th>
+            </tr>
           </thead>
+          <tbody>
+            {team.length === 0 && <h1>No data</h1>}
+            {team.length > 0 && team}
+          </tbody>
         </table>
       </div>
     </div>
