@@ -2,6 +2,8 @@ import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firesto
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
+import TableToExcel from '@linways/table-to-excel'
+
 function Table() {
   const [teamList, setTeamList] = useState([]);
   const [datesList, setDatesList] = useState([]);
@@ -48,21 +50,41 @@ function Table() {
 
   let team = datesList.length && datesList.map(obj => {
     const { user, dates } = obj;
-    let userJSX = <th>{user.code}</th>
+    let userJSX = (
+      <>
+      <th data-a-h="center"
+        data-b-a-s='thin'
+        data-a-v="middle">{user.code}</th>
+      <th data-a-h="center"
+        data-b-a-s='thin'
+        data-a-v="middle">{user.name}</th>
+      </>
+    )
     return(
-      <tr key={user.name}>
+      <tr data-height='40' key={user.name}>
         {userJSX}
         {dates.map(date => {
           return (
-            <td key={date.id}>{date.day}</td>
+            <td 
+            data-a-h="center"
+            data-a-v="middle"
+            data-b-a-s='thin'
+            data-t='d'
+              key={date.id}>{date.day || ''}</td>
           )
         })}  
       </tr>
     )
   })
 
-
-  console.log(team);
+  const convertTable = () => {
+    TableToExcel.convert(document.getElementById('table1'), {
+      name: 'table_2_2022.xlsx',
+      sheet: {
+        name: 'Sheet 2_2022'
+      }
+    })
+  }
 
   return (
    <>
@@ -70,14 +92,34 @@ function Table() {
      <div className="container p-3">
       <div className="row p-2">
         <h1 className='col-6'>Table</h1>
-        <input className='col-4' type='button' value='Download' />
+        <input 
+          className='col-4' 
+          onClick={convertTable}
+          type='button' value='Download' />
       </div>
       <div className="table-responsive-sm p-2">
-        <table className="table table-striped table-bordered p-2">
+        <table
+          data-a-ltr='true'
+          data-a-h='left'
+         id='table1' className="table table-striped table-bordered p-2">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Dates</th>
+            <tr></tr>
+            <tr data-height='45'>
+              <th  
+                data-a-h="center"
+                data-a-v="middle" 
+                data-b-a-s='thin'
+                data-f-bold='true'>Code</th>
+              <th  
+                data-a-h="center"
+                data-a-v="middle" 
+                data-b-a-s='thin'
+                data-f-bold='true'>Name</th>
+              <th 
+                data-a-h="center"
+                data-a-v="middle" 
+                data-b-a-s='thin'
+                data-f-bold='true'>Dates</th>
             </tr>
           </thead>
           <tbody>
