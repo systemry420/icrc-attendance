@@ -7,6 +7,7 @@ import TableToExcel from '@linways/table-to-excel'
 function Table() {
   const [teamList, setTeamList] = useState([]);
   const [datesList, setDatesList] = useState([]);
+  const pages = ['team', 'table'];
 
   const readList = async () => {
     setTeamList([])
@@ -16,14 +17,12 @@ function Table() {
       const member = { id: doc.id, ...doc.data() };
       list.push(member)
     })
-    // console.log(list);
     setTeamList(list)
   }
 
   const readSchedule = async () => {
     setDatesList([])
     teamList.forEach((user) => {
-      console.log(user);
       getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
       .then(query => {
         console.log(query.data()['data']);
@@ -43,8 +42,8 @@ function Table() {
     readList();
     readSchedule()
     return () => {
-      setTeamList([])
-      setDatesList([])
+      // setTeamList([])
+      // setDatesList([])
     };
   }, []);
 
@@ -88,7 +87,7 @@ function Table() {
 
   return (
    <>
-      <Navbar />
+      <Navbar pages={pages} />
      <div className="container p-3">
       <div className="row p-2">
         <h1 className='col-6'>Table</h1>

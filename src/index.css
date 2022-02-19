@@ -52,6 +52,13 @@ nav ul {
   display: flex;
   padding: 0;
   height: 65px;
+  justify-content: space-between;
+  width: 97%;
+}
+
+nav ul span {
+  font-weight: bold;
+  align-self: center;
 }
 
 nav ul li {

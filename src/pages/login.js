@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getDocs, collection } from 'firebase/firestore'
 import { db } from '../App'
-import Navbar from "../components/Navbar";
 import '../index.css';
 import { useNavigate } from 'react-router-dom'
-
+import logo from '../images/logo.png'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -49,11 +49,17 @@ const Login = () => {
   
   return (
     <>
-      <Navbar />
-      <div className="container">
+      {/* <Navbar /> */}
+      <div className="container p-2">
       <div className="fill-form form-box">
-      <h1>Title</h1>
-        <form className="col-lg-6 col-md-6 col-sm-12">
+        <div className="row">
+          <div className="justify-center align-middle text-center col-lg-6 p-3 m-2">
+            <img 
+            style={{width: '45%', margin: '.2em auto'}}
+            src={logo} alt='LRC' />
+          </div>
+        <form className="text-center col-lg-6 col-md-6 col-sm-12">
+            <h1>Login as team member</h1>
             <div className="mt-4">
               <input
                 id="name"
@@ -74,12 +80,20 @@ const Login = () => {
             </div>
 
             <div className="mt-4">
+              <div>
               <input 
                 type='submit'
                 onClick={handleSubmit}
                 value='Login' />
+              </div>
+              <div className="mt-4">
+              <Link 
+                to={'/'}>
+                  Admin Login</Link>
+              </div>
             </div>
         </form>
+        </div>
 
       </div>
     </div>

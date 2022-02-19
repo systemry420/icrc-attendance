@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 function List({ list, removeDate, saveSchedule }) {
     return (
@@ -27,7 +29,9 @@ function List({ list, removeDate, saveSchedule }) {
                   {day.day}
                   <span 
                     onClick={() => removeDate(day.id)}
-                    className='remove-btn text-danger'>X</span>
+                    className='remove-btn text-danger'>
+                      <FontAwesomeIcon icon={faXmark} />
+                    </span>
                 </li>
               );
             })}

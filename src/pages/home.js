@@ -7,9 +7,6 @@ import { db } from '../App'
 
 function Home() {
   const [user, setUser] = useState({});
-  const pages = [
-    'home', 'schedule', 'jjj'
-  ];
   const [list, setList] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
 
@@ -84,7 +81,7 @@ function Home() {
 
   return (
     <>
-      <Navbar pages={pages} />
+      <Navbar message={`Welcome ${user.name} `}/>
       <div className="container">
         <div className='row'>
           <Calendar list={list} onSelectDay={onSelectDay}/>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import List from "./TeamList";
+import TeamList from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
 import { 
@@ -8,10 +8,14 @@ import {
   getDocs, 
   deleteDoc, doc } from "firebase/firestore"; 
 import { db } from '../../App'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 function Team() {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
+  const [addIcon, setAddIcon] = useState(faPlus);
+  const pages = ['team', 'table'];
 
   const addMember = async (member) => {
     try {
@@ -27,6 +31,7 @@ function Team() {
     try {
       deleteDoc(doc(db, `users`, id)).then(() => {
         console.log('deleted');
+        // remove corresponding schedule
       })
     } catch (e) {
     }
@@ -48,24 +53,26 @@ function Team() {
     setTeamList(list)
   }
 
+  const toggleForm = () => {
+    setShowForm(!showForm);
+    addIcon === faPlus ? setAddIcon(faArrowUp) : setAddIcon(faPlus)
+  }
+
   return (
     <>
-      <Navbar />
+      <Navbar pages={pages} />
       <div className="container p-4">
       <div className="fill-form form-box">
         <div className="row">
-          <div className="col-8">
-            <h1>Add Member</h1>
-          </div>
-          <div className="col-4">
+          <div className="col-2">
             <button 
               className="button"
-              onClick={() => setShowForm(!showForm)}
+              onClick={() => toggleForm()}
               style={{
-                'fontSize': '2em',
-                'height': '1.5em',
+                'fontSize': '1.3em',
+                'height': '2em',
                 'padding': '0',
-                'width':'1.5em',
+                'width':'2em',
                 'border': 'none',
                 'alignItems': 'center',
                 'alignContent': 'center',
@@ -73,8 +80,11 @@ function Team() {
                 'borderRadius': '50%',
                 'outline': 'none'
                 }}>
-                  <span  style={{'height': '0', 'padding': '0'}}>+</span> 
+                  <FontAwesomeIcon icon={addIcon} />
                 </button>
+          </div>
+          <div className="col-6">
+            <h1>Add Member</h1>
           </div>
           {
             showForm ? (
@@ -82,7 +92,7 @@ function Team() {
             ) : ('')
           }
 
-          <List 
+          <TeamList 
             removeMember={removeMember} 
             className='col-6' 
             teamList={teamList} />

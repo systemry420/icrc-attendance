@@ -1,4 +1,7 @@
-const List = ({ teamList, removeMember }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+
+const TeamList = ({ teamList, removeMember }) => {
   return (
     <div className="col-lg-6 col-md-6 col-sm-12">
       <hr style={{ margin: "1em" }} />
@@ -14,7 +17,9 @@ const List = ({ teamList, removeMember }) => {
                 {member.data.name} - {member.data.phone}
                 <span 
                   onClick={()=> removeMember(member.id)}
-                  className="remove-btn text-danger">X</span>
+                  className="remove-btn text-danger">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </span>
               </li>
             );
           })}
@@ -26,4 +31,4 @@ const List = ({ teamList, removeMember }) => {
   );
 };
 
-export default List;
+export default TeamList;
