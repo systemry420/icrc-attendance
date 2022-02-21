@@ -18,12 +18,8 @@ const Dialog = () => {
   return (
     <>
       {ReactDom.createPortal(
-        <div className="overlay"></div>,
-        document.getElementById("overlay")
-      )}
-      {ReactDom.createPortal(
         <DialogDiv />, 
-        document.getElementById("dialog")
+        document.getElementById("overlay")
       )}
     </>
   );

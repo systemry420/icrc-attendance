@@ -6,6 +6,7 @@ import { getDocs, collection, setDoc, doc } from "firebase/firestore";
 import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
 import Dialog from '../components/Dialog';
+import Snackbar from '../components/Snackbar';
 
 function Home() {
   const [language, dispatch] = useReducer(LanguageReducer, lang)
@@ -84,7 +85,8 @@ function Home() {
 
   return (
     <>
-      <Dialog />
+      <Snackbar />
+      {/* <Dialog /> */}
       <Navbar message={`Welcome ${user.name} `}/>
       <div className="container">
         <div className='row'>

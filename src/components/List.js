@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 function List({ list, removeDate, saveSchedule, language }) {
-  console.log(language);
+  // console.log(language);
     return (
       <div className="mb-5 col-lg-6 justify-center align-center">
         <div className="row">
