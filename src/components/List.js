@@ -2,7 +2,8 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
-function List({ list, removeDate, saveSchedule }) {
+function List({ list, removeDate, saveSchedule, language }) {
+  console.log(language);
     return (
       <div className="mb-5 col-lg-6 justify-center align-center">
         <div className="row">
@@ -13,7 +14,7 @@ function List({ list, removeDate, saveSchedule }) {
             <input 
               type='button' 
               onClick={() => saveSchedule() }
-              value='Save'
+              value={language.strings[language.current]['save']}
               style={{'padding': '.4em'}}
               className='button' />
           </div>

@@ -92,3 +92,39 @@ nav ul li .navlink {
   font-weight: 700;
   font-size: 1.25em;
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 3;
+}
+
+.dialog {
+  position: absolute;
+  width: 300px;
+  background-color: #fff;
+  padding: 1em;
+  align-self: center;
+  justify-self: center;
+  border-radius: 10px;
+  z-index: 5;
+}
+
+.dialog-title {
+  padding: .3em;
+}
+
+.dialog-content {
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  padding: 1em .2em;
+}
+
+.dialog-actions {
+  margin: .2em;
+  padding: .2em;
+}

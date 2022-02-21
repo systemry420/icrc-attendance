@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import Calendar from '../components/Calendar';
 import List from '../components/List';
 import Navbar from '../components/Navbar';
 import { getDocs, collection, setDoc, doc } from "firebase/firestore";
 import { db } from '../App'
+import { LanguageReducer, languageState as lang } from '../reducers/Language';
+import Dialog from '../components/Dialog';
 
 function Home() {
+  const [language, dispatch] = useReducer(LanguageReducer, lang)
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
@@ -81,11 +84,12 @@ function Home() {
 
   return (
     <>
+      <Dialog />
       <Navbar message={`Welcome ${user.name} `}/>
       <div className="container">
         <div className='row'>
-          <Calendar list={list} onSelectDay={onSelectDay}/>
-          <List list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
+          <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
+          <List language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>
       </div>
     </>

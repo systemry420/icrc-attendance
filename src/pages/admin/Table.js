@@ -76,6 +76,8 @@ function Table() {
     )
   })
 
+  console.log(team)
+
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
       name: 'table_2_2022.xlsx',
@@ -122,7 +124,9 @@ function Table() {
             </tr>
           </thead>
           <tbody>
-            {team.length === 0 && <h1>No data</h1>}
+            <tr>
+              {team.length === 0 && <h1>No data</h1>}
+            </tr>
             {team.length > 0 && team}
           </tbody>
         </table>

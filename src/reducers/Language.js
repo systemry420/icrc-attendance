@@ -1,9 +1,11 @@
 const strings = {
   EN: {
     download: "تنزيل",
+    save: 'حفظ',
   },
   AR: {
     download: "Download",
+    save: 'Save'
   },
 };
 
@@ -13,14 +15,16 @@ export const languageState = {
   direction: "ltr",
 };
 
-export const LanguageReducer = (state = { current: "EN" }, action) => {
+export const LanguageReducer = (state, action) => {
     switch (action.type) {
     case "SWITCH_LANGUAGE":
-        console.log(state, action);
-        if (languageState.current === 'AR') {
-            return { ...languageState, current: 'EN', direction: 'ltr' }
+        if (state.current === 'AR') {
+            return { strings: strings['EN'], current: 'EN', direction: 'ltr' }
         } 
-        return { ...languageState, current: 'AR', direction: 'rtl' }
+        else if (state.current === 'EN') {
+          return { strings: strings['AR'], current: 'AR', direction: 'rtl' }
+        }
+        break;
     default:
       return state;
   }
