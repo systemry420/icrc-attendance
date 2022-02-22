@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../index.css'
+import { Toast, ToastContainer } from 'react-bootstrap'
 
-const Snackbar = () => {
+const Snackbar = (show = true) => {
+  
   return (
-    <div className="snackbar">
-      <div className="row justify-center align-center content-center">
-        <div className="w-10 p-2 m-1 col-lg-6 col-md-6 col-sm-8 col-xs-8">
-          message
-        </div>
-      </div>
-    </div>
+    <ToastContainer show={show} autohide delay={3000} className="p-3" position="bottom-center">
+    <Toast bg="dark">
+      <Toast.Body>
+        <span className="text-white">Hello</span>
+      </Toast.Body>
+    </Toast>
+    </ToastContainer>
   );
 }
 

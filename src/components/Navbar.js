@@ -32,7 +32,7 @@ function Navbar({message, pages = [] }) {
           )
         })}
 
-        <span className='dropdown'>
+        {/* <span className='dropdown'>
           <span onClick={() => setShowDropdown(!showDropdown)} id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className='dropdown-toggle' aria-labelledby="dropdownMenuButton" type='button'>
             <FontAwesomeIcon icon={faCog} style={{fontSize: '1.4em', color: 'Navy'}} />
           </span>
@@ -44,7 +44,7 @@ function Navbar({message, pages = [] }) {
               Logout
             </button>
           </div>}
-        </span>
+        </span> */}
       </ul>
     </nav>
   );

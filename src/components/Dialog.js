@@ -1,27 +1,25 @@
 import React from "react";
 import ReactDom from "react-dom";
 import "../index.css";
+import { Modal } from 'react-bootstrap'
 
 const DialogDiv = (props) => {
   return (
-    <div className="dialog">
-      <div className="dialog-title">title</div>
-      <div className="dialog-content">content</div>
-      <div className="dialog-actions">
-        <button className="button">Ok</button>
-      </div>
-    </div>
+    <Modal show={true}>
+      <Modal.Header>Hi</Modal.Header>
+      <Modal.Body>asdfasdf</Modal.Body>
+      <Modal.Footer>This is the footer</Modal.Footer>
+    </Modal>
   );
 };
 
 const Dialog = () => {
   return (
-    <>
-      {ReactDom.createPortal(
-        <DialogDiv />, 
-        document.getElementById("overlay")
-      )}
-    </>
+    <Modal show={true}>
+      <Modal.Header>Hi</Modal.Header>
+      <Modal.Body>asdfasdf</Modal.Body>
+      <Modal.Footer>This is the footer</Modal.Footer>
+    </Modal>
   );
 };
 

@@ -85,13 +85,13 @@ function Home() {
 
   return (
     <>
-      <Snackbar />
       {/* <Dialog /> */}
       <Navbar message={`Welcome ${user.name} `}/>
       <div className="container">
         <div className='row'>
           <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
           <List language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
+          <Snackbar />
         </div>
       </div>
     </>
