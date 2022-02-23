@@ -35,17 +35,19 @@ function Home() {
     if (list.length === 0) {
       return;
     }
-    console.log(list);
+    let obj = {}
+    list.forEach(day => {
+      obj = {...obj, [day.id]: day}
+    })
+
+    console.log(obj);
     try {
       // grab month from CAL
       const scheduleRef = collection(db, 'schedule');
-      list.forEach(day => {
-        let dayId = day.day.split(' ').join('');
-        addDoc(collection(scheduleRef, `${monthID}/${dayId}/`), user )
+      setDoc(doc(scheduleRef, monthID + `/${user.code}/${user.code}`), obj)
         .then((doc) => {
           console.log('added', doc);
         })
-      })
         // disable button
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -60,7 +62,8 @@ function Home() {
       const scheduleQuery = collection(db, `schedule/${monthID}/${member.code}`)
       const querySnapshot = await getDocs(scheduleQuery);
       querySnapshot.forEach((doc) => {
-          const obj = doc.data()['data']
+          console.log(doc.id);
+          const obj = doc.data()
           Object.keys(obj).forEach(d => {
             daysList.push(obj[d])
           })

@@ -1,46 +1,46 @@
-import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, collectionGroup, documentId } from 'firebase/firestore';
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
 import TableToExcel from '@linways/table-to-excel'
 import Calendar from '../../components/Calendar';
 
-function Table() {
-  const [teamList, setTeamList] = useState([]);
-  const [datesList, setDatesList] = useState([]);
+const Table = () => {
+  const [scheduleList, setScheduleList] = useState([]);
   const [daysList, setDaysList] = useState([]);
   const pages = ['team', 'table'];
 
   const readSchedule = async () => {
-    setDatesList([])
-    const list = JSON.parse(localStorage.getItem('teamList'));
-    setTeamList(list);
-
+    let usersList = [];
     setDaysList(getDaysInMonth(1, 2022));
+    for (let i = 0; i < daysList.length; i++) {
+      const day = daysList[i];
+      const querySnap = await getDocs(collection(db, `schedule/2_2022/${day.id}`))
 
-    teamList.forEach((user) => {
-      getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
-      .then(query => {
-        // console.log(query.data()['data']);
-        // const dates = Object.keys(query.data()['data']).map(key => {
-        //   return query.data()['data'][key] 
-        // })
-
-        // console.log(dates);
-        // setDatesList(prev => {
-        //   return [...prev, {
-        //     user, dates
-        //   }]
-        // })
+      usersList = []
+      // eslint-disable-next-line no-loop-func
+      querySnap.forEach(document => {
+        usersList.push(document.data())
       })
-    })
+
+      // eslint-disable-next-line no-loop-func
+      setScheduleList(prev => {
+        return [...prev, {day, users: usersList}]
+      }); 
+      
+    }
+    usersList = [] 
   }
 
   function getDaysInMonth(month, year) {
-    var date = new Date(year, month, 1);
+    var date = new Date(year, month, 1); 
     var days = [];
     while (date.getMonth() === month) {
-      days.push(new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)));
+      // console.log(new Date(date).getTime().toString());
+      days.push(
+        {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
+          id: new Date(date).getTime().toString()
+        });
       date.setDate(date.getDate() + 1);
     }
     return days;
@@ -49,39 +49,41 @@ function Table() {
   useEffect(() => {
     readSchedule()
     return () => {
-      // setTeamList([])
-      // setDatesList([])
+      setScheduleList([])
+      setDaysList([])
     };
-  }, []);
+  }, []); 
 
-  let team = datesList.length && datesList.map(obj => {
-    const { user, dates } = obj;
-    let userJSX = (
-      <>
-      <th data-a-h="center"
-        data-b-a-s='thin'
-        data-a-v="middle">{user.code}</th>
-      <th data-a-h="center"
-        data-b-a-s='thin'
-        data-a-v="middle">{user.name}</th>
-      </>
-    )
-    return(
-      <tr data-height='40' key={user.name}>
-        {userJSX}
-        {dates.map(date => {
-          return (
-            <td 
-            data-a-h="center"
-            data-a-v="middle"
-            data-b-a-s='thin'
-            data-t='d'
-              key={date.id}>{date.day || ''}</td>
-          )
-        })}  
-      </tr>
-    )
-  })
+  console.log(scheduleList);
+
+  // let team = scheduleList.length && scheduleList.map(obj => {
+  //   const { day, users } = obj;
+  //   let userJSX = (
+  //     <>
+  //     <th data-a-h="center"
+  //       data-b-a-s='thin'
+  //       data-a-v="middle">{day.day.id}</th>
+  //     <th data-a-h="center"
+  //       data-b-a-s='thin'
+  //       data-a-v="middle">{day.day.id}</th>
+  //     </>
+  //   )
+  //   return(
+  //     <tr data-height='40' key={day.day.id}>
+  //       {userJSX}
+  //       {users.map(user => {
+  //         return (
+  //           <td 
+  //           data-a-h="center"
+  //           data-a-v="middle"
+  //           data-b-a-s='thin'
+  //           data-t='d'
+  //             key={user.code}>{user.name || ''}</td>
+  //         )
+  //       })}  
+  //     </tr>
+  //   )
+  // })
 
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
@@ -104,22 +106,31 @@ function Table() {
           type='button' value='Download' />
       </div>
       <div className="table-responsive m-2">
-      <table className='table table-responsive table-bordered'>
-          {daysList.map(day => {
+      <table id="table1" className='table table-responsive table-bordered'>
+        <tbody>
+          {/* {team} */}
+          {scheduleList.map(workday => {
             return (
-              <tr key={day}>
+              <tr key={workday.day.id}>
                 <th style={{ width: "65px", border: "1px solid lightgray" }}>
-                  {day}
+                  {workday.day.string}
                 </th>
-                <td style={{ border: "1px solid lightgray" }}>
-                  abc
-                </td>
+                  {workday.users.map(user => {
+                      return (
+                        <td 
+                        data-a-h="center"
+                        data-a-v="middle"
+                        data-b-a-s='thin'
+                        data-t='d'
+                          key={user.code}>{user.name || ''}</td>
+                      )
+                  })}  
               </tr>
             );
           })}
+        </tbody>
       </table>
-      {/* </table>
-        <table
+      {/* <table
           data-a-ltr='true'
           data-a-h='left'
          id='table1' className="table table-striped table-bordered p-2">
