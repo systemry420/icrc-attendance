@@ -3,16 +3,20 @@ import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
 import TableToExcel from '@linways/table-to-excel'
+import Calendar from '../../components/Calendar';
 
 function Table() {
   const [teamList, setTeamList] = useState([]);
   const [datesList, setDatesList] = useState([]);
+  const [daysList, setDaysList] = useState([]);
   const pages = ['team', 'table'];
 
   const readSchedule = async () => {
     setDatesList([])
     const list = JSON.parse(localStorage.getItem('teamList'));
     setTeamList(list);
+
+    setDaysList(getDaysInMonth(1, 2022));
 
     teamList.forEach((user) => {
       getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
@@ -30,6 +34,16 @@ function Table() {
         // })
       })
     })
+  }
+
+  function getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    var days = [];
+    while (date.getMonth() === month) {
+      days.push(new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)));
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
   }
 
   useEffect(() => {
@@ -69,8 +83,6 @@ function Table() {
     )
   })
 
-  console.log(team)
-
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
       name: 'table_2_2022.xlsx',
@@ -92,6 +104,16 @@ function Table() {
           type='button' value='Download' />
       </div>
       <div className="table-responsive-sm p-2">
+      <table className='table table-responsive table-bordered'>
+        <tr>
+          {daysList.map(day => {
+            return (
+              <td style={{width: '30px', border: '1px solid gray'}}>{day}</td>
+            )
+          })}
+        </tr>
+      </table>
+      {/* </table>
         <table
           data-a-ltr='true'
           data-a-h='left'
@@ -122,7 +144,7 @@ function Table() {
             </tr>
             {team.length > 0 && team}
           </tbody>
-        </table>
+        </table> */}
       </div>
     </div>
    </>
