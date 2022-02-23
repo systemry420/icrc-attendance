@@ -25,7 +25,7 @@ const TeamList = ({ teamList, removeMember }) => {
           })}
         </ul>
       ) : (
-        <h3>No member has been added</h3>
+        <h3>No members have been added</h3>
       )}
     </div>
   );

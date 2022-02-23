@@ -9,37 +9,30 @@ function Table() {
   const [datesList, setDatesList] = useState([]);
   const pages = ['team', 'table'];
 
-  const readList = async () => {
-    setTeamList([])
-    const list = [];
-    const usersQuery = await getDocs(collection(db, 'users'))
-    usersQuery.forEach(async doc => {
-      const member = { id: doc.id, ...doc.data() };
-      list.push(member)
-    })
-    setTeamList(list)
-  }
-
   const readSchedule = async () => {
     setDatesList([])
+    const list = JSON.parse(localStorage.getItem('teamList'));
+    setTeamList(list);
+
     teamList.forEach((user) => {
       getDoc(doc(db, `schedule/2_2022/${user.code}/${user.code}`))
       .then(query => {
-        console.log(query.data()['data']);
-        const dates = Object.keys(query.data()['data']).map(key => {
-          return query.data()['data'][key] 
-        })
-        setDatesList(prev => {
-          return [...prev, {
-            user, dates
-          }]
-        })
+        // console.log(query.data()['data']);
+        // const dates = Object.keys(query.data()['data']).map(key => {
+        //   return query.data()['data'][key] 
+        // })
+
+        // console.log(dates);
+        // setDatesList(prev => {
+        //   return [...prev, {
+        //     user, dates
+        //   }]
+        // })
       })
     })
   }
 
   useEffect(() => {
-    readList();
     readSchedule()
     return () => {
       // setTeamList([])

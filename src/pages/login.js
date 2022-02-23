@@ -53,7 +53,7 @@ const Login = () => {
       <div className="container p-2">
       <div className="fill-form form-box">
         <div className="row">
-          <div className="justify-center align-middle text-center col-lg-6 p-3 m-2">
+          <div className="justify-center align-middle text-center col-lg-5 col-md-5 p-4">
             <img 
             style={{width: '45%', margin: '.2em auto'}}
             src={logo} alt='LRC' />

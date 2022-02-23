@@ -51,6 +51,7 @@ function Team() {
       list.push(member)
     });
     setTeamList(list)
+    localStorage.setItem('teamList', JSON.stringify(teamList));
   }
 
   const toggleForm = () => {
