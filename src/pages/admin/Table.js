@@ -95,23 +95,28 @@ function Table() {
   return (
    <>
       <Navbar pages={pages} />
-     <div className="container p-3">
-      <div className="row p-2">
+     <div className="container p-2">
+      <div className="row">
         <h1 className='col-6'>Table</h1>
         <input 
           className='col-4' 
           onClick={convertTable}
           type='button' value='Download' />
       </div>
-      <div className="table-responsive-sm p-2">
+      <div className="table-responsive m-2">
       <table className='table table-responsive table-bordered'>
-        <tr>
           {daysList.map(day => {
             return (
-              <td style={{width: '30px', border: '1px solid gray'}}>{day}</td>
-            )
+              <tr key={day}>
+                <th style={{ width: "65px", border: "1px solid lightgray" }}>
+                  {day}
+                </th>
+                <td style={{ border: "1px solid lightgray" }}>
+                  abc
+                </td>
+              </tr>
+            );
           })}
-        </tr>
       </table>
       {/* </table>
         <table

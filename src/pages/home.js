@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import Calendar from '../components/Calendar';
 import List from '../components/List';
 import Navbar from '../components/Navbar';
-import { getDocs, collection, setDoc, doc } from "firebase/firestore";
+import { getDocs, collection, setDoc, doc, updateDoc, addDoc } from "firebase/firestore";
 import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
 import Dialog from '../components/Dialog';
@@ -35,15 +35,17 @@ function Home() {
     if (list.length === 0) {
       return;
     }
-    const obj = Object.assign({}, list)
+    console.log(list);
     try {
       // grab month from CAL
       const scheduleRef = collection(db, 'schedule');
-      setDoc(doc(scheduleRef, monthID + `/${user.code}/${user.code}`),
-         { data: obj})
+      list.forEach(day => {
+        let dayId = day.day.split(' ').join('');
+        addDoc(collection(scheduleRef, `${monthID}/${dayId}/`), user )
         .then((doc) => {
           console.log('added', doc);
         })
+      })
         // disable button
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -91,7 +93,7 @@ function Home() {
         <div className='row'>
           <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
           <List language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
-          <Snackbar />
+          {/* <Snackbar show={'false'} /> */}
         </div>
       </div>
     </>

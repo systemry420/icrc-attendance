@@ -50,10 +50,10 @@ const Login = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="container p-2">
+      <div className="container p-4">
       <div className="fill-form form-box">
-        <div className="row">
-          <div className="justify-center align-middle text-center col-lg-5 col-md-5 p-4">
+        <div className="row  p-4">
+          <div className="justify-center align-middle text-center col-lg-5 col-md-5">
             <img 
             style={{width: '45%', margin: '.2em auto'}}
             src={logo} alt='LRC' />
