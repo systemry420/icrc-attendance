@@ -35,19 +35,22 @@ function Home() {
     if (list.length === 0) {
       return;
     }
-    let obj = {}
-    list.forEach(day => {
-      obj = {...obj, [day.id]: day}
-    })
+    // let obj = {}
+    // list.forEach(day => {
+    //   obj = {...obj, [day.id]: day}
+    // })
 
-    console.log(obj);
     try {
       // grab month from CAL
       const scheduleRef = collection(db, 'schedule');
-      setDoc(doc(scheduleRef, monthID + `/${user.code}/${user.code}`), obj)
+
+      list.forEach(day => {
+        console.log(day);
+        addDoc(collection(scheduleRef, monthID + `/${day.id}`), user)
         .then((doc) => {
           console.log('added', doc);
         })
+      })
         // disable button
     } catch (e) {
       console.error("Error adding document: ", e);

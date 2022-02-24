@@ -3,7 +3,7 @@ import { useState } from 'react'
 const Form = ({ id, addMember }) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
-    const code = `LRC${id + 1}`
+    const code = `CRL${id + 1}`
   
     const handleSubmit = (e) => {
       e.preventDefault()

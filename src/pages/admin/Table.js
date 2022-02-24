@@ -9,27 +9,42 @@ const Table = () => {
   const [scheduleList, setScheduleList] = useState([]);
   const [daysList, setDaysList] = useState([]);
   const pages = ['team', 'table'];
+  const teamList = JSON.parse(localStorage.getItem('teamList'));
+
+  // const readSchedule = async () => {
+  //   let usersList = [];
+  //   setDaysList(getDaysInMonth(1, 2022));
+  //   daysList.forEach(day => {
+  //     teamList.forEach(async user => {
+  //       let days = []
+  //       const querySnap = await getDoc(doc(db, `schedule/2_2022/${user['data'].code}/${user['data'].code}`))
+  //       if(querySnap.exists()) {
+  //         days = Object.keys(querySnap.data())
+  //       }
+  //       // console.log(days);
+  //       for (let i = 0; i < days.length; i++) {
+  //         const d = days[i];
+  //         console.log(d, day.id);
+  //         if (d === day.id) {
+  //           usersList.push({day, user}) 
+  //         } 
+  //       }
+  //     }); 
+      
+  //   });
+  //   console.log(usersList);
+  // }
 
   const readSchedule = async () => {
-    let usersList = [];
-    setDaysList(getDaysInMonth(1, 2022));
-    for (let i = 0; i < daysList.length; i++) {
-      const day = daysList[i];
-      const querySnap = await getDocs(collection(db, `schedule/2_2022/${day.id}`))
-
-      usersList = []
-      // eslint-disable-next-line no-loop-func
-      querySnap.forEach(document => {
-        usersList.push(document.data())
+    setDaysList(getDaysInMonth(1, 2022))
+    daysList.forEach(day => {
+      teamList.forEach(async user => {
+        const querySnap = await getDoc(doc(db, `schedule/2_2022/${user['data'].code}/${user['data'].code}`))
+        if(querySnap.exists()) {
+          console.log(querySnap.data());
+        }
       })
-
-      // eslint-disable-next-line no-loop-func
-      setScheduleList(prev => {
-        return [...prev, {day, users: usersList}]
-      }); 
-      
-    }
-    usersList = [] 
+    })
   }
 
   function getDaysInMonth(month, year) {
@@ -112,7 +127,9 @@ const Table = () => {
           {scheduleList.map(workday => {
             return (
               <tr key={workday.day.id}>
-                <th style={{ width: "65px", border: "1px solid lightgray" }}>
+                <th data-a-h="center"
+                        data-a-v="middle"
+                        data-b-a-s='thin' style={{ width: "65px", border: "1px solid lightgray" }}>
                   {workday.day.string}
                 </th>
                   {workday.users.map(user => {
@@ -121,7 +138,7 @@ const Table = () => {
                         data-a-h="center"
                         data-a-v="middle"
                         data-b-a-s='thin'
-                        data-t='d'
+                        data-t='d' 
                           key={user.code}>{user.name || ''}</td>
                       )
                   })}  
