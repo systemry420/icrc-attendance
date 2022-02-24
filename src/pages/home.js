@@ -7,12 +7,19 @@ import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
 import Dialog from '../components/Dialog';
 import Snackbar from '../components/Snackbar';
+import { ref, set, onValue, push, child, update } from "firebase/database";
 
 function Home() {
   const [language, dispatch] = useReducer(LanguageReducer, lang)
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
+
+  useEffect(() => {
+    readSchedule()
+    return () => {
+    };
+  }, []);
 
   const onSelectDay = (day) => {
     const selectedDate = formatDate(day)
@@ -31,59 +38,48 @@ function Home() {
     setList(removed)
   }
 
-  const saveSchedule = async () => {
+  const saveSchedule = () => {
     if (list.length === 0) {
       return;
     }
-    // let obj = {}
-    // list.forEach(day => {
-    //   obj = {...obj, [day.id]: day}
-    // })
-
-    try {
-      // grab month from CAL
-      const scheduleRef = collection(db, 'schedule');
-
-      list.forEach(day => {
-        console.log(day);
-        addDoc(collection(scheduleRef, monthID + `/${day.id}`), user)
-        .then((doc) => {
-          console.log('added', doc);
-        })
-      })
-        // disable button
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    let updates = {}
+    list.forEach(day => {
+      const newKey = push(child(ref(db), 'dates')).key;
+      updates = {...updates,
+        [`users/${user.code}/dates/${monthID}/${newKey}`]: day
+      }
+    })
+    update(ref(db), updates).then(res => {
+      console.log(res, 'added');
+    })
   }
 
-  const readSchedule = async () => {
+  const readSchedule = () => {
+    let daysList = []
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
-    const daysList = []
-    try {
-      const scheduleQuery = collection(db, `schedule/${monthID}/${member.code}`)
-      const querySnapshot = await getDocs(scheduleQuery);
-      querySnapshot.forEach((doc) => {
-          console.log(doc.id);
-          const obj = doc.data()
-          Object.keys(obj).forEach(d => {
-            daysList.push(obj[d])
-          })
-      });
+    onValue(ref(db, `users/${member.code}/dates/${monthID}`), snapshot => {
+      const days = snapshot.val()
+      daysList = (Object.keys(days).map(key => {
+        return days[key]
+      }))
       setList(daysList);
-        // disable button or confirm
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-
+    })
   }
 
-  useEffect(() => {
-    readSchedule()
-    return () => {
-    };
-  }, []);
+  function getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1); 
+    var days = [];
+    while (date.getMonth() === month) {
+      // console.log(new Date(date).getTime().toString());
+      days.push(
+        {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
+          id: new Date(date).getTime().toString()
+        });
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
+  }
 
   function formatDate(day) {
     const selectedDay = new Date(day).toString();

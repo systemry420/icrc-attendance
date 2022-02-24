@@ -4,12 +4,13 @@ import Navbar from '../../components/Navbar';
 import Form from "./Form";
 import { 
   collection, 
-  addDoc, 
   getDocs, 
   deleteDoc, doc } from "firebase/firestore"; 
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { ref, set } from "firebase/database";
+
 
 function Team() {
   const [showForm, setShowForm] = useState(false);
@@ -18,14 +19,11 @@ function Team() {
   const pages = ['team', 'table'];
 
   const addMember = async (member) => {
-    try {
-      const docRef = await addDoc(collection(db, `users`), member);
-      console.log("Document written with ID: ", docRef.id);
-      // setTeamList([...teamList, {...member, id: docRef.id}])
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
+    set(ref(db, 'users/' + member.code), member)
+      .then(() => {
+        console.log('user added');
+      })
+  }
 
   const removeMember = async (id) => {
     try {

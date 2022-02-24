@@ -5,8 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom
 import Home from './pages/home';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore"; 
+import { getDatabase } from "firebase/database";
 import Login from './pages/Login';
 import Team from './pages/admin/Team';
 import Table from './pages/admin/Table';
@@ -24,7 +23,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const db = getFirestore();
+export const db = getDatabase(app);
 
 function App() {
   const [schedule, setSchedule] = useState([]);
