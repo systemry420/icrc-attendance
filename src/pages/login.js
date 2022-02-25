@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getDocs, collection } from 'firebase/firestore'
 import { db } from '../App'
 import '../index.css';
 import { useNavigate } from 'react-router-dom'
@@ -17,15 +16,15 @@ const Login = () => {
     e.preventDefault()
     for (let i = 0; i < team.length; i++) {
       const member = team[i]
-      if (member.code === code && member.password === password) {
-        navigate('/')
+      console.log(member.code, code, member.password, password);
+      if ((member.code === code) && (member.password === password)) {
+        // navigate('/')
         localStorage.setItem('user', JSON.stringify(member))
-        // save to localstorage
-        break;
+        // guard
       }
       else {
-        alert('error')
-        return;
+        alert('error') /// fix this logic
+        continue;
       }
     }
     
@@ -65,7 +64,7 @@ const Login = () => {
             <div className="mt-4">
               <input
                 id="name"
-                autoComplete="false"
+                autoComplete="none"
                 placeholder="Username"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
@@ -85,6 +84,8 @@ const Login = () => {
               <div>
               <input 
                 type='submit'
+                style={(!code || !password)? {background: '#d55' } : {}}
+                disabled={!code || !password}
                 onClick={handleSubmit}
                 value='Login' />
               </div>

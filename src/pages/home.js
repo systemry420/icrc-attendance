@@ -13,6 +13,7 @@ function Home() {
   const [language, dispatch] = useReducer(LanguageReducer, lang)
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
+  const [toBeRemoved, setToBeRemoved] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
 
   useEffect(() => {
@@ -34,8 +35,10 @@ function Home() {
 
   const removeDate = (id) => {
     // TODO: alert
-    const removed = list.filter(d => d.id !== id);
-    setList(removed)
+    const toBeRemoved = list.filter(d => d.id === id);
+    const updatedList = list.filter(d => d.id !== id);
+    setToBeRemoved(toBeRemoved)
+    setList(updatedList)
   }
 
   const saveSchedule = () => {
@@ -43,15 +46,20 @@ function Home() {
       return;
     }
     let updates = {}
+    toBeRemoved.forEach(day => {
+      updates = {...updates,
+        [`users/${user.code}/dates/${monthID}/${day.id}`]: null,
+        [`schedule/${monthID}/${day.id}/${user.code}`]: null
+      }
+    })
     list.forEach(day => {
-      const newKey = push(child(ref(db), 'dates')).key;
       updates = {...updates,
         [`users/${user.code}/dates/${monthID}/${day.id}`]: day,
-        [`schedule/${monthID}/${day.id}/${user.code + newKey}`]: user
+        [`schedule/${monthID}/${day.id}/${user.code}`]: user
       }
     })
     update(ref(db), updates).then(res => {
-      console.log(res, 'added');
+      console.log(res, 'updated');
     })
   }
 
@@ -62,9 +70,11 @@ function Home() {
     setUser(member)
     onValue(ref(db, `users/${member.code}/dates/${monthID}`), snapshot => {
       const days = snapshot.val()
-      daysList = (Object.keys(days).map(key => {
-        return days[key]
-      }))
+      if (days) {
+        daysList = (Object.keys(days).map(key => {
+          return days[key]
+        }))
+      }
       setList(daysList);
     })
   }
