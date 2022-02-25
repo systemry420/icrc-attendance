@@ -69,20 +69,6 @@ function Home() {
     })
   }
 
-  function getDaysInMonth(month, year) {
-    var date = new Date(year, month, 1); 
-    var days = [];
-    while (date.getMonth() === month) {
-      // console.log(new Date(date).getTime().toString());
-      days.push(
-        {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
-          id: new Date(date).getTime().toString()
-        });
-      date.setDate(date.getDate() + 1);
-    }
-    return days;
-  }
-
   function formatDate(day) {
     const selectedDay = new Date(day).toString();
     const formattedDay = selectedDay.substring(0, selectedDay.indexOf('00'))

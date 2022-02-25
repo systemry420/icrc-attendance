@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TeamList from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
@@ -9,48 +9,47 @@ import {
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { ref, set } from "firebase/database";
+import { ref, set, push, child, onValue, remove } from "firebase/database";
 
 
-function Team() {
+const Team = () => {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
   const [addIcon, setAddIcon] = useState(faPlus);
   const pages = ['team', 'table'];
 
-  const addMember = async (member) => {
+  const addMember = (member) => {
     set(ref(db, 'users/' + member.code), member)
       .then(() => {
         console.log('user added');
       })
   }
 
-  const removeMember = async (id) => {
-    try {
-      deleteDoc(doc(db, `users`, id)).then(() => {
-        console.log('deleted');
-        // remove corresponding schedule
-      })
-    } catch (e) {
-    }
+  const removeMember = (code) => {
+    set(ref(db, 'users/' + code), null)
+    .then(() => {
+      console.log('user removed');
+    })
+    readTeam()
+  }
+
+  const readTeam = () => {
+    let list = []
+    onValue(ref(db, 'users'), snapshot => {
+      if (snapshot.val()) {
+        list = Object.keys(snapshot.val()).map(key => {
+          return snapshot.val()[key]
+        })
+      }
+      setTeamList(list)
+    })
   }
 
   useEffect(() => {
     readTeam()
     return () => {
     };
-  }, [teamList]);
-
-  const readTeam = async () => {
-    const list = [];
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      const member = { id: doc.id, data: doc.data() }
-      list.push(member)
-    });
-    setTeamList(list)
-    localStorage.setItem('teamList', JSON.stringify(teamList));
-  }
+  }, []);
 
   const toggleForm = () => {
     setShowForm(!showForm);
@@ -60,7 +59,7 @@ function Team() {
   return (
     <>
       <Navbar pages={pages} />
-      <div className="container p-4">
+      <div className="container p-lg-4 p-sm-2">
       <div className="fill-form form-box">
         <div className="row">
           <div className="col-2">

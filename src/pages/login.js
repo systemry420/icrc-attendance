@@ -34,13 +34,13 @@ const Login = () => {
   }
 
   const readTeam = async () => {
-    let list
+    let list = []
     onValue(ref(db, 'users'), snapshot => {
       list = Object.keys(snapshot.val()).map(key => {
         return snapshot.val()[key]
       })
+      setTeam(list)
     })
-    setTeam(list)
   }
 
   useEffect(() => {
