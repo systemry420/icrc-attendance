@@ -2,12 +2,11 @@ import React, { useState, useEffect, useReducer } from 'react'
 import Calendar from '../components/Calendar';
 import List from '../components/List';
 import Navbar from '../components/Navbar';
-import { getDocs, collection, setDoc, doc, updateDoc, addDoc } from "firebase/firestore";
 import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
 import Dialog from '../components/Dialog';
 import Snackbar from '../components/Snackbar';
-import { ref, set, onValue, push, child, update } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 
 function Home() {
   const [language, dispatch] = useReducer(LanguageReducer, lang)
@@ -48,13 +47,13 @@ function Home() {
     let updates = {}
     toBeRemoved.forEach(day => {
       updates = {...updates,
-        [`users/${user.code}/dates/${monthID}/${day.id}`]: null,
+        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
         [`schedule/${monthID}/${day.id}/${user.code}`]: null
       }
     })
     list.forEach(day => {
       updates = {...updates,
-        [`users/${user.code}/dates/${monthID}/${day.id}`]: day,
+        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
         [`schedule/${monthID}/${day.id}/${user.code}`]: user
       }
     })
@@ -68,7 +67,7 @@ function Home() {
     setList([])
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
-    onValue(ref(db, `users/${member.code}/dates/${monthID}`), snapshot => {
+    onValue(ref(db, `users_dates/${member.code}/dates/${monthID}`), snapshot => {
       const days = snapshot.val()
       if (days) {
         daysList = (Object.keys(days).map(key => {

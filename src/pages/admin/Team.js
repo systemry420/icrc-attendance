@@ -1,15 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import TeamList from "./TeamList";
 import Navbar from '../../components/Navbar';
 import Form from "./Form";
-import { 
-  collection, 
-  getDocs, 
-  deleteDoc, doc } from "firebase/firestore"; 
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { ref, set, push, child, onValue, remove } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 
 
 const Team = () => {

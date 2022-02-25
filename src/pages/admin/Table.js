@@ -66,10 +66,10 @@ const Table = () => {
                   data-a-h="center"
                   data-a-v="middle"
                   data-b-a-s="thin"
-                  data-t="d"
+                  data-height='100'
                   key={user.code}
                   >
-                  {user.name || ". "}
+                  {user.name}
                 </td>
               );
             }
