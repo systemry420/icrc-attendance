@@ -1,49 +1,28 @@
-import { collection, getDocs, getDoc, doc, query, where, collectionGroup, documentId } from 'firebase/firestore';
 import React, {useState, useEffect } from 'react'
 import { db } from "../../App";
 import Navbar from '../../components/Navbar';
 import TableToExcel from '@linways/table-to-excel'
-import Calendar from '../../components/Calendar';
+import { onValue, ref } from 'firebase/database' 
 
 const Table = () => {
   const [scheduleList, setScheduleList] = useState([]);
   const [daysList, setDaysList] = useState([]);
   const pages = ['team', 'table'];
   const teamList = JSON.parse(localStorage.getItem('teamList'));
-
-  // const readSchedule = async () => {
-  //   let usersList = [];
-  //   setDaysList(getDaysInMonth(1, 2022));
-  //   daysList.forEach(day => {
-  //     teamList.forEach(async user => {
-  //       let days = []
-  //       const querySnap = await getDoc(doc(db, `schedule/2_2022/${user['data'].code}/${user['data'].code}`))
-  //       if(querySnap.exists()) {
-  //         days = Object.keys(querySnap.data())
-  //       }
-  //       // console.log(days);
-  //       for (let i = 0; i < days.length; i++) {
-  //         const d = days[i];
-  //         console.log(d, day.id);
-  //         if (d === day.id) {
-  //           usersList.push({day, user}) 
-  //         } 
-  //       }
-  //     }); 
-      
-  //   });
-  //   console.log(usersList);
-  // }
+  const [dailyList, setDailyList] = useState([]);
 
   const readSchedule = async () => {
     setDaysList(getDaysInMonth(1, 2022))
-    daysList.forEach(day => {
-      teamList.forEach(async user => {
-        const querySnap = await getDoc(doc(db, `schedule/2_2022/${user['data'].code}/${user['data'].code}`))
-        if(querySnap.exists()) {
-          console.log(querySnap.data());
-        }
-      })
+    let list, users;
+    onValue(ref(db, `schedule/2_2022`), snapshot => {
+      const days = snapshot.val()
+      list = Object.keys(days).map(key => {
+        users = Object.keys(days[key]).map(k => {
+          return days[key][k]
+        })
+        return {day: key, users}
+      }) 
+      setDailyList(list);
     })
   }
 
@@ -69,36 +48,36 @@ const Table = () => {
     };
   }, []); 
 
-  console.log(scheduleList);
 
-  // let team = scheduleList.length && scheduleList.map(obj => {
-  //   const { day, users } = obj;
-  //   let userJSX = (
-  //     <>
-  //     <th data-a-h="center"
-  //       data-b-a-s='thin'
-  //       data-a-v="middle">{day.day.id}</th>
-  //     <th data-a-h="center"
-  //       data-b-a-s='thin'
-  //       data-a-v="middle">{day.day.id}</th>
-  //     </>
-  //   )
-  //   return(
-  //     <tr data-height='40' key={day.day.id}>
-  //       {userJSX}
-  //       {users.map(user => {
-  //         return (
-  //           <td 
-  //           data-a-h="center"
-  //           data-a-v="middle"
-  //           data-b-a-s='thin'
-  //           data-t='d'
-  //             key={user.code}>{user.name || ''}</td>
-  //         )
-  //       })}  
-  //     </tr>
-  //   )
-  // })
+  let team = daysList.map(day => {
+    let dayJSX = (
+      <th data-a-h="center"
+        data-b-a-s='thin'
+        data-a-v="middle" key={'th' + day.id}>{day.string}</th>
+    )
+    return(
+      <tr data-height='40' key={'tr' + day.id}>
+        {dayJSX}
+        {dailyList.map(item => {
+          return item['users'].map(user => {
+            if (item.day === day.id) {
+              return (
+                <td
+                  data-a-h="center"
+                  data-a-v="middle"
+                  data-b-a-s="thin"
+                  data-t="d"
+                  key={user.code}
+                  >
+                  {user.name || ". "}
+                </td>
+              );
+            }
+          })
+        })}  
+      </tr>
+    )
+  })
 
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
@@ -110,77 +89,25 @@ const Table = () => {
   }
 
   return (
-   <>
+    <>
       <Navbar pages={pages} />
-     <div className="container p-2">
-      <div className="row">
-        <h1 className='col-6'>Table</h1>
-        <input 
-          className='col-4' 
-          onClick={convertTable}
-          type='button' value='Download' />
+      <div className="container p-3">
+        <div className="row">
+          <h1 className="col-6">Table</h1>
+          <input
+            className="col-4"
+            onClick={convertTable}
+            type="button"
+            value="Download"
+          />
+        </div>
+        <div className="table-responsive m-2">
+          <table id="table1" className="table table-responsive table-bordered">
+            <tbody>{team}</tbody>
+          </table>
+        </div>
       </div>
-      <div className="table-responsive m-2">
-      <table id="table1" className='table table-responsive table-bordered'>
-        <tbody>
-          {/* {team} */}
-          {scheduleList.map(workday => {
-            return (
-              <tr key={workday.day.id}>
-                <th data-a-h="center"
-                        data-a-v="middle"
-                        data-b-a-s='thin' style={{ width: "65px", border: "1px solid lightgray" }}>
-                  {workday.day.string}
-                </th>
-                  {workday.users.map(user => {
-                      return (
-                        <td 
-                        data-a-h="center"
-                        data-a-v="middle"
-                        data-b-a-s='thin'
-                        data-t='d' 
-                          key={user.code}>{user.name || ''}</td>
-                      )
-                  })}  
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {/* <table
-          data-a-ltr='true'
-          data-a-h='left'
-         id='table1' className="table table-striped table-bordered p-2">
-          <thead>
-            <tr></tr>
-            <tr data-height='45'>
-              <th  
-                data-a-h="center"
-                data-a-v="middle" 
-                data-b-a-s='thin'
-                data-f-bold='true'>Code</th>
-              <th  
-                data-a-h="center"
-                data-a-v="middle" 
-                data-b-a-s='thin'
-                data-f-bold='true'>Name</th>
-              <th 
-                data-a-h="center"
-                data-a-v="middle" 
-                data-b-a-s='thin'
-                data-f-bold='true'>Dates</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {team.length === 0 && <h1>No data</h1>}
-            </tr>
-            {team.length > 0 && team}
-          </tbody>
-        </table> */}
-      </div>
-    </div>
-   </>
+    </>
   );
 }
 

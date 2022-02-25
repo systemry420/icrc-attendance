@@ -46,7 +46,8 @@ function Home() {
     list.forEach(day => {
       const newKey = push(child(ref(db), 'dates')).key;
       updates = {...updates,
-        [`users/${user.code}/dates/${monthID}/${newKey}`]: day
+        [`users/${user.code}/dates/${monthID}/${day.id}`]: day,
+        [`schedule/${monthID}/${day.id}/${user.code + newKey}`]: user
       }
     })
     update(ref(db), updates).then(res => {
@@ -55,7 +56,8 @@ function Home() {
   }
 
   const readSchedule = () => {
-    let daysList = []
+    let daysList = [];
+    setList([])
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
     onValue(ref(db, `users/${member.code}/dates/${monthID}`), snapshot => {

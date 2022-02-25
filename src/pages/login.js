@@ -5,9 +5,10 @@ import '../index.css';
 import { useNavigate } from 'react-router-dom'
 import logo from '../images/logo.png'
 import { Link } from 'react-router-dom'
+import { ref, onValue } from 'firebase/database'
 
 const Login = () => {
-  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [team, setTeam] = useState([])
   const navigate = useNavigate();
@@ -15,8 +16,8 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     for (let i = 0; i < team.length; i++) {
-      const member = team[i]['data'];
-      if (member.code === name && member.password === password) {
+      const member = team[i]
+      if (member.code === code && member.password === password) {
         navigate('/')
         localStorage.setItem('user', JSON.stringify(member))
         // save to localstorage
@@ -24,20 +25,21 @@ const Login = () => {
       }
       else {
         alert('error')
+        return;
       }
     }
     
-    setName('')
+    setCode('')
     setPassword('')
   }
 
   const readTeam = async () => {
-    const list = [];
-    const querySnapshot = await getDocs(collection(db, "users"));
-    querySnapshot.forEach((doc) => {
-      const member = {data: doc.data()}
-      list.push(member)
-    });
+    let list
+    onValue(ref(db, 'users'), snapshot => {
+      list = Object.keys(snapshot.val()).map(key => {
+        return snapshot.val()[key]
+      })
+    })
     setTeam(list)
   }
 
@@ -65,8 +67,8 @@ const Login = () => {
                 id="name"
                 autoComplete="false"
                 placeholder="Username"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
                 type='text' />
             </div>
 
