@@ -139,3 +139,7 @@ nav ul li .navlink {
   border: #000;
   box-shadow: 0 0 4px 4px #baabaa;
 }
+
+.react-calendar {
+  width: 100%;
+}

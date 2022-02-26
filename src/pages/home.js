@@ -22,6 +22,7 @@ function Home() {
   }, []);
 
   const onSelectDay = (day) => {
+    console.log(day);
     const selectedDate = formatDate(day)
     for (let i = 0; i < list.length; i++) {
       const element = list[i];

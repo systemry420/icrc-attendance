@@ -3,26 +3,28 @@ import { db } from "../../App";
 import Navbar from '../../components/Navbar';
 import TableToExcel from '@linways/table-to-excel'
 import { onValue, ref } from 'firebase/database' 
+import Calendar from '../../components/Calendar';
 
 const Table = () => {
-  const [scheduleList, setScheduleList] = useState([]);
   const [daysList, setDaysList] = useState([]);
   const pages = ['team', 'table'];
-  const teamList = JSON.parse(localStorage.getItem('teamList'));
   const [dailyList, setDailyList] = useState([]);
+  const [monthID, setMonthID] = useState(`${+(new Date().getMonth()).toString()}_${+new Date().getFullYear()}`)
 
-  const readSchedule = async () => {
-    setDaysList(getDaysInMonth(1, 2022))
+  const readSchedule = () => {
+    setDaysList(getDaysInMonth(+monthID.split('_')[0], +monthID.split('_')[1]))
     let list, users;
-    onValue(ref(db, `schedule/2_2022`), snapshot => {
-      const days = snapshot.val()
-      list = Object.keys(days).map(key => {
-        users = Object.keys(days[key]).map(k => {
-          return days[key][k]
-        })
-        return {day: key, users}
-      }) 
-      setDailyList(list);
+    onValue(ref(db, `schedule/${monthID}`), async snapshot => {
+      const days = await snapshot.val()
+      if (days) {
+        list = Object.keys(days).map(key => {
+          users = Object.keys(days[key]).map(k => {
+            return days[key][k]
+          })
+          return {day: key, users}
+        }) 
+        setDailyList(list);
+      }
     })
   }
 
@@ -30,7 +32,6 @@ const Table = () => {
     var date = new Date(year, month, 1); 
     var days = [];
     while (date.getMonth() === month) {
-      // console.log(new Date(date).getTime().toString());
       days.push(
         {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
           id: new Date(date).getTime().toString()
@@ -43,11 +44,23 @@ const Table = () => {
   useEffect(() => {
     readSchedule()
     return () => {
-      setScheduleList([])
       setDaysList([])
     };
-  }, []); 
+  }, [monthID]); 
 
+  const convertTable = () => {
+    TableToExcel.convert(document.getElementById('table1'), {
+      name: 'table_2_2022.xlsx',
+      sheet: {
+        name: 'Sheet 2_2022'
+      }
+    })
+  }
+
+  const onSelectDay = (date) => {
+    let d = `${(new Date(date).getMonth()).toString()}_${new Date(date).getFullYear()}`
+    setMonthID(d)
+  }
 
   let team = daysList.map(day => {
     let dayJSX = (
@@ -79,19 +92,14 @@ const Table = () => {
     )
   })
 
-  const convertTable = () => {
-    TableToExcel.convert(document.getElementById('table1'), {
-      name: 'table_2_2022.xlsx',
-      sheet: {
-        name: 'Sheet 2_2022'
-      }
-    })
-  }
-
   return (
     <>
       <Navbar pages={pages} />
       <div className="container p-3">
+      <Calendar 
+        maxDetail='year'
+        onSelectDay={onSelectDay} 
+        />
         <div className="row">
           <h1 className="col-6">Table</h1>
           <input

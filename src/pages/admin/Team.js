@@ -12,7 +12,6 @@ const Team = () => {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
   const [addIcon, setAddIcon] = useState(faPlus);
-  const [code, setCode] = useState('');
   const pages = ['team', 'table'];
 
   const addMember = (member) => {

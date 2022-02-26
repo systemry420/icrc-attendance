@@ -4,20 +4,17 @@ import 'react-calendar/dist/Calendar.css';
 import '../index.css';
 
 
-function Calendar({ onSelectDay, list }){
-  const [selectedDates, setSelectedDates] = useState(new Date());
-
-  const handleSelection = (date) => {
-
-    onSelectDay(date)
-  };
+function Calendar({ onSelectDay, maxDetail = 'month' }){
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
-    <div className='mt-1 mb-4 col-lg-6 justify-center align-center'>
+    <div className='mt-1 mb-4 col-12 justify-center align-center'>
       <h1>Calendar</h1>
       <Cal 
-        value={selectedDates} 
-        onClickDay={handleSelection}
+        className="w-100"
+        value={selectedDate} 
+        onChange={(value) => onSelectDay(value)}
+        maxDetail={maxDetail}
       />
     </div>
   );
