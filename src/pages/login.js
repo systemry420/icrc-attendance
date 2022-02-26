@@ -4,16 +4,13 @@ import "../index.css";
 import { ref, onValue } from "firebase/database";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
-import ChangePass from "./ChangePass";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [team, setTeam] = useState([]);
-  const [showConfirm, setShowConfirm] = useState(true);
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,13 +23,8 @@ const Login = () => {
         }
       });
 
-      if (member.password === "123456") {
-        setUser(member);
-        setShowConfirm(true);
-      } else {
-        navigate("/");
-        localStorage.setItem("user", JSON.stringify(member));
-      }
+      navigate('/')
+      localStorage.setItem('user', JSON.stringify(member))
       // guard
     } else {
       alert("error");
@@ -69,8 +61,8 @@ const Login = () => {
                 src={logo}
                 alt="LRC"
               />
+              {/* animate logo */}
             </div>
-            {!showConfirm ? (
               <Form
                 code={code}
                 setCode={setCode}
@@ -78,9 +70,6 @@ const Login = () => {
                 setPassword={setPassword}
                 handleSubmit={handleSubmit}
               />
-            ) : (
-              <ChangePass member={user} />
-            )}
           </div>
         </div>
       </div>

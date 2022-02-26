@@ -93,6 +93,8 @@ function Home() {
           <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
           <List language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
           {/* <Snackbar show={'false'} /> */}
+
+          {/* animate save button */}
         </div>
       </div>
     </>

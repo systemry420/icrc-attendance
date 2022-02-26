@@ -12,6 +12,7 @@ const Team = () => {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
   const [addIcon, setAddIcon] = useState(faPlus);
+  const [code, setCode] = useState('');
   const pages = ['team', 'table'];
 
   const addMember = (member) => {
@@ -19,6 +20,7 @@ const Team = () => {
       .then(() => {
         console.log('user added');
       })
+      readTeam()
   }
 
   const removeMember = (code) => {
@@ -82,7 +84,8 @@ const Team = () => {
           </div>
           {
             showForm ? (
-              <Form id={teamList.length} addMember={addMember} />
+              <Form
+               list={teamList} addMember={addMember} />
             ) : ('')
           }
 

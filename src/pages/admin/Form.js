@@ -1,14 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const Form = ({ id, addMember }) => {
+const Form = ({ addMember, list }) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
-    const code = `CRL${id + 1}`
+    const [code, setCode] = useState('');
+
+    useEffect(() => {
+      if (list.length === 0) {
+        setCode('CRL1')
+      } else {
+        let lastUser = list[list.length - 1]['code']
+        let lastCode = +lastUser.substring(lastUser.indexOf('L') + 1)
+        setCode(`CRL${lastCode + 1}`)
+      }
+      return () => {
+      };
+    }, [list]);
   
     const handleSubmit = (e) => {
       e.preventDefault()
       if (name && phone) {
-        const member = {code, name, phone, password: '123456'};
+        const member = {code, name, phone, password: phone};
         addMember(member);
         setName('')
         setPhone('')
