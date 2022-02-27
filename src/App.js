@@ -9,13 +9,13 @@ import Table from './pages/admin/Table';
 import AdminLogin from './pages/AdminLogin'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
-  authDomain: "icrc-attend.firebaseapp.com",
-  projectId: "icrc-attend",
-  storageBucket: "icrc-attend.appspot.com",
-  messagingSenderId: "953233861572",
-  appId: "1:953233861572:web:58d2e6b53f179c9ad99291",
-  measurementId: "G-HMSZ34BK75"
+  apiKey: "AIzaSyAmwvHW806lTUQCwi1hU7Zhm6Unabu8LGU",
+  authDomain: "drr305-0.firebaseapp.com",
+  projectId: "drr305-0",
+  storageBucket: "drr305-0.appspot.com",
+  messagingSenderId: "406102692288",
+  appId: "1:406102692288:web:cc737992a04c231ed93825",
+  measurementId: "G-ZDXFLCHGPJ"
 };
 
 // Initialize Firebase
