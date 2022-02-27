@@ -64,9 +64,15 @@ const Table = () => {
 
   let team = daysList.map(day => {
     let dayJSX = (
-      <th data-a-h="center"
+      <th 
+        style={{ position: 'sticky' }}
+        data-a-h="center"
         data-b-a-s='thin'
-        data-a-v="middle" key={'th' + day.id}>{day.string}</th>
+        data-a-v="middle" key={'th' + day.id}>
+          <div style={{display: 'inline-block', position: 'sticky'}}>
+            {day.string}
+          </div>
+        </th>
     )
     return(
       <tr data-height='40' key={'tr' + day.id}>

@@ -6,27 +6,28 @@ import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { ref, set, onValue } from "firebase/database";
-
+import Snackbar from "../../components/Snackbar";
 
 const Team = () => {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
   const [addIcon, setAddIcon] = useState(faPlus);
   const pages = ['team', 'table'];
+  const [toast, setToast] = useState("");
 
   const addMember = (member) => {
     set(ref(db, 'users/' + member.code), member)
       .then(() => {
-        console.log('user added');
+        readTeam()
       })
-      readTeam()
   }
 
   const removeMember = (code) => {
     set(ref(db, 'users/' + code), null)
     .then(() => {
-      console.log('user removed');
+      setToast('Member removed')
     })
+    setToast('')
     readTeam()
   }
 
@@ -87,6 +88,7 @@ const Team = () => {
                list={teamList} addMember={addMember} />
             ) : ('')
           }
+        {toast && <Snackbar message={toast} /> }
 
           <TeamList 
             removeMember={removeMember} 

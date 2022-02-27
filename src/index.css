@@ -24,6 +24,7 @@ input, .button {
   border-radius: 50px;
   padding: 0.5em 1em;
   width: 90%;
+  outline: none;
 }
 
 input[type="submit"], .button, input[type="button"] {
@@ -142,4 +143,15 @@ nav ul li .navlink {
 
 .react-calendar {
   width: 100%;
+}
+
+.shake {
+  animation: sh 1.5s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes sh {
+  0% {
+    transform: scale(.8);
+  }
 }

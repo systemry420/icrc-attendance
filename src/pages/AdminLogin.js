@@ -3,48 +3,50 @@ import "../index.css";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Animated } from "react-animated-css";
+import Snackbar from "../components/Snackbar";
 
-const AdminLogin = ({ }) => {
+const AdminLogin = ({}) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     try {
-      let admin = JSON.parse(localStorage.getItem('admin'))
+      let admin = JSON.parse(localStorage.getItem("admin"));
       if (admin) {
-        navigate('/team')
+        navigate("/team");
       }
-    } catch(e) {
-        console.log(e);
+    } catch (e) {
+      console.log(e);
     }
-    return () => {
-    };
+    return () => {};
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let member = null;
 
-    if (code === 'AD1' && password === '123456') {
-      member = { code, password }
-      localStorage.setItem('admin', JSON.stringify(member))
-      navigate('/team')
+    if (code === "AD1" && password === "123456") {
+      member = { code, password };
+      localStorage.setItem("admin", JSON.stringify(member));
+      navigate("/team");
       try {
-        let user = JSON.parse(localStorage.getItem('user'))
+        let user = JSON.parse(localStorage.getItem("user"));
         if (user) {
-          localStorage.removeItem('user')
+          localStorage.removeItem("user");
         }
-      } catch(e) {
-          console.log(e);
+      } catch (e) {
+        console.log(e);
       }
-      } else {
-      alert("error");
+    } else {
+      setError("Invalid code or password");
     }
 
     setCode("");
     setPassword("");
-  }
+  };
 
   return (
     <>
@@ -53,23 +55,26 @@ const AdminLogin = ({ }) => {
         <div className="fill-form form-box">
           <div className="row p-4">
             <div className="justify-center align-middle text-center col-lg-5 col-md-5">
-              <img
-                style={{ width: "45%", margin: ".2em auto" }}
-                src={logo}
-                alt="CRL"
-              />
-              {/* animate logo */}
+              <Animated animationIn="rotateInDownRight">
+                <img
+                  style={{ width: "45%", margin: ".2em auto" }}
+                  src={logo}
+                  alt="CRL"
+                />
+                <h1>Admin Login</h1>
+              </Animated>
             </div>
-              <Form
-                code={code}
-                setCode={setCode}
-                password={password}
-                setPassword={setPassword}
-                handleSubmit={handleSubmit}
-              />
+            <Form
+              code={code}
+              setCode={setCode}
+              password={password}
+              setPassword={setPassword}
+              handleSubmit={handleSubmit}
+            />
           </div>
         </div>
       </div>
+      {error && <Snackbar message={error} />}
     </>
   );
 };
@@ -77,7 +82,6 @@ const AdminLogin = ({ }) => {
 const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
   return (
     <form className="text-center col-lg-6 col-md-6 col-sm-12">
-      <h1>Admin Login</h1>
       <div className="mt-4">
         <input
           id="name"
@@ -111,8 +115,8 @@ const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
         </div>
       </div>
       <div className="mt-4">
-          <Link to={"/login"}>Member Login</Link>
-        </div>
+        <Link to={"/login"}>Member Login</Link>
+      </div>
     </form>
   );
 };

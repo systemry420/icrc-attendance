@@ -5,12 +5,15 @@ import { ref, onValue } from "firebase/database";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import {Animated} from "react-animated-css";
+import Snackbar from "../components/Snackbar";
 
 const Login = () => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [team, setTeam] = useState([]);
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     try {
@@ -39,9 +42,9 @@ const Login = () => {
       navigate('/home')
       localStorage.setItem('user', JSON.stringify(member))
       // remove admin on logout
-      
+
     } else {
-      alert("error");
+      setError('Invalid code or password')
     }
 
     setCode("");
@@ -70,12 +73,16 @@ const Login = () => {
         <div className="fill-form form-box">
           <div className="row p-4">
             <div className="justify-center align-middle text-center col-lg-5 col-md-5">
+            <Animated
+                animationIn="rotateInDownLeft"
+              >
               <img
                 style={{ width: "45%", margin: ".2em auto" }}
                 src={logo}
-                alt="LRC"
+                alt="CRL"
               />
-              {/* animate logo */}
+              <h1>Login as team member</h1>
+              </Animated>
             </div>
               <Form
                 code={code}
@@ -87,6 +94,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {error && <Snackbar message={error} />}
     </>
   );
 };
@@ -94,12 +102,11 @@ const Login = () => {
 const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
   return (
     <form className="text-center col-lg-6 col-md-6 col-sm-12">
-      <h1>Login as team member</h1>
       <div className="mt-4">
         <input
           id="name"
           autoComplete="none"
-          placeholder="Username"
+          placeholder="Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           type="text"

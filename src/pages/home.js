@@ -14,6 +14,7 @@ function Home() {
   const [list, setList] = useState([]);
   const [toBeRemoved, setToBeRemoved] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
+  const [shake, setShake] = useState(false);
 
   useEffect(() => {
     readSchedule()
@@ -22,7 +23,7 @@ function Home() {
   }, []);
 
   const onSelectDay = (day) => {
-    console.log(day);
+    setShake(true)
     const selectedDate = formatDate(day)
     for (let i = 0; i < list.length; i++) {
       const element = list[i];
@@ -92,10 +93,7 @@ function Home() {
       <div className="container">
         <div className='row'>
           <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
-          <List language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
-          {/* <Snackbar show={'false'} /> */}
-
-          {/* animate save button */}
+          <List shake={shake} language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>
       </div>
     </>
