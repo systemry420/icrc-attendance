@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../App";
 import "../index.css";
-import { ref, onValue } from "firebase/database";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const AdminLogin = ({ }) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
-  const [team, setTeam] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     try {
-      let user = JSON.parse(localStorage.getItem('user'))
-      if (user) {
-        navigate('/home')
+      let admin = JSON.parse(localStorage.getItem('admin'))
+      if (admin) {
+        navigate('/team')
       }
     } catch(e) {
         console.log(e);
@@ -29,39 +26,25 @@ const Login = () => {
     e.preventDefault();
     let member = null;
 
-    if (team.find((m) => m.code === code && m.password === password)) {
-      member = team.find((m) => {
-        if (m.code === code) {
-          return m;
+    if (code === 'AD1' && password === '123456') {
+      member = { code, password }
+      localStorage.setItem('admin', JSON.stringify(member))
+      navigate('/team')
+      try {
+        let user = JSON.parse(localStorage.getItem('user'))
+        if (user) {
+          localStorage.removeItem('user')
         }
-      });
-
-      navigate('/home')
-      localStorage.setItem('user', JSON.stringify(member))
-      // remove admin on logout
-      
-    } else {
+      } catch(e) {
+          console.log(e);
+      }
+      } else {
       alert("error");
     }
 
     setCode("");
     setPassword("");
-  };
-
-  const readTeam = async () => {
-    let list = [];
-    onValue(ref(db, "users"), (snapshot) => {
-      list = Object.keys(snapshot.val()).map((key) => {
-        return snapshot.val()[key];
-      });
-      setTeam(list);
-    });
-  };
-
-  useEffect(() => {
-    readTeam();
-    return () => {};
-  }, []);
+  }
 
   return (
     <>
@@ -73,7 +56,7 @@ const Login = () => {
               <img
                 style={{ width: "45%", margin: ".2em auto" }}
                 src={logo}
-                alt="LRC"
+                alt="CRL"
               />
               {/* animate logo */}
             </div>
@@ -94,7 +77,7 @@ const Login = () => {
 const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
   return (
     <form className="text-center col-lg-6 col-md-6 col-sm-12">
-      <h1>Login as team member</h1>
+      <h1>Admin Login</h1>
       <div className="mt-4">
         <input
           id="name"
@@ -126,12 +109,12 @@ const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
             value="Login"
           />
         </div>
-        <div className="mt-4">
-          <Link to={"/admin-login"}>Admin Login</Link>
-        </div>
       </div>
+      <div className="mt-4">
+          <Link to={"/login"}>Member Login</Link>
+        </div>
     </form>
   );
 };
 
-export default Login;
+export default AdminLogin;

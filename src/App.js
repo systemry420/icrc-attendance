@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
 import './index.css';
-import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Home from './pages/home';
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getDatabase } from "firebase/database";
-import Login from './pages/Login';
+import Login from './pages/login';
 import Team from './pages/admin/Team';
 import Table from './pages/admin/Table';
+import AdminLogin from './pages/AdminLogin'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
@@ -22,24 +20,24 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 export const db = getDatabase(app);
 
 function App() {
-  const [schedule, setSchedule] = useState([]);
 
   return (
     <>
       <Router>
         <Routes>
-          <Route exact path='/' 
+          <Route exact path='/home' 
             element={<Home />}></Route>
-          <Route path='/login' 
-            element={<Login />}></Route>
+          <Route path='/admin-login' 
+            element={<AdminLogin />}></Route>
           <Route path='/team' 
             element={<Team />}></Route>
           <Route path='/table'
             element={<Table />}></Route>
+          <Route path='*'
+            element={<Login />} />
         </Routes>
       </Router>
     </>
