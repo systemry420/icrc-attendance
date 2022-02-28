@@ -5,7 +5,7 @@ import Form from "./Form";
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { ref, set, onValue } from "firebase/database";
+import { ref, set, onValue, orderByChild } from "firebase/database";
 import Snackbar from "../../components/Snackbar";
 
 const Team = () => {
@@ -18,37 +18,39 @@ const Team = () => {
   const addMember = (member) => {
     set(ref(db, 'users/' + member.code), member)
       .then(() => {
+        readTeam()
+      }).then(() => {
         setToast('New member added')
         setTimeout(() => {
           setToast('')
         }, 3000);
-      }).then(() => {
-        readTeam()
       })
   }
 
   const removeMember = (code) => {
     set(ref(db, 'users/' + code), null)
     .then(() => {
+      readTeam()
+    }).then(() => {
       setToast('Member removed')
       setTimeout(() => {
         setToast('')
       }, 3000);
-    }).then(() => {
-      readTeam()
     })
   }
 
   const readTeam = () => {
     let list = []
-    onValue(ref(db, 'users'), snapshot => {
-      if (snapshot.val()) {
-        list = Object.keys(snapshot.val()).map(key => {
-          return snapshot.val()[key]
-        })
-      }
-      setTeamList(list)
-    })
+    try {
+      onValue(ref(db, 'users'), snapshot => {
+        if (snapshot.val()) {
+          list = Object.keys(snapshot.val()).map(key => {
+            return snapshot.val()[key]
+          })
+        }
+        setTeamList(list)
+      })
+    } catch(e) {}
   }
 
   useEffect(() => {
@@ -65,8 +67,8 @@ const Team = () => {
   return (
     <>
       <Navbar pages={pages} />
+      <Snackbar message={toast} />
       <div className="container p-lg-4 p-sm-2">
-      <Snackbar message={toast} pos="middle-center" />
       <div className="fill-form form-box">
         <div className="row">
           <div className="col-2">

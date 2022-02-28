@@ -44,6 +44,7 @@ input[type="submit"]:active {
 }
 
 nav {
+  position: sticky;
   box-shadow: 0 0 6px 4px #999;
   margin-bottom: 10px;
 }

@@ -7,11 +7,15 @@ const Form = ({ addMember, list }) => {
 
     useEffect(() => {
       if (list.length === 0) {
-        setCode('CRL1')
+        setCode('CRL001')
       } else {
         let lastUser = list[list.length - 1]['code']
         let lastCode = +lastUser.substring(lastUser.indexOf('L') + 1)
-        setCode(`CRL${lastCode + 1}`)
+        if (lastCode >= 9) {
+          setCode(`CRL0${lastCode + 1}`)
+        } else {
+          setCode(`CRL00${lastCode + 1}`)
+        }
       }
       return () => {
       };
@@ -24,8 +28,6 @@ const Form = ({ addMember, list }) => {
         addMember(member);
         setName('')
         setPhone('')
-      } else {
-        alert('Please fill')
       }
     }
   
@@ -60,7 +62,11 @@ const Form = ({ addMember, list }) => {
       </div>
   
       <div className="mt-4">
-        <input type="submit" onClick={handleSubmit} value="Add" />
+        <input 
+        type="submit" 
+        style={!name || !phone ? { background: "#d55" } : {}}
+        disabled={(!name && !phone)}
+        onClick={handleSubmit} value="Add" />
       </div>
     </form>
     )
