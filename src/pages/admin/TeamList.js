@@ -1,15 +1,32 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
-  faUser,
-  faMobile,
   faHashtag,
 } from "@fortawesome/free-solid-svg-icons";
 import { Animated } from "react-animated-css";
+import Dialog from '../../components/Dialog';
+import React, {useState} from 'react'
 
 const TeamList = ({ teamList, removeMember }) => {
+  const [dialog, setDialog] = useState(false);
+  const [codeToRemove, setCodeToRemove] = useState('');
+
+  const showDialog = (code) => {
+    setDialog(true)
+    setCodeToRemove(code)
+  }
+
   return (
     <div className="col-lg-6 col-md-6 col-sm-12">
+      <Dialog show={dialog} 
+        handleCancel={() => setDialog(false)} 
+        handleOk={() => {
+          removeMember(codeToRemove)
+          setDialog(false)
+        }} 
+        message={'This action will delete all related data. Proceed?'} 
+        title={'Delete user?'} />
+
       <hr style={{ margin: "1em" }} />
       <h1>Team List</h1>
       {teamList.length > 0 ? (
@@ -17,7 +34,7 @@ const TeamList = ({ teamList, removeMember }) => {
           {teamList.map((member, idx) => {
             return (
               <ListItem
-                removeMember={removeMember}
+                showDialog={showDialog}
                 key={member.code}
                 member={member}
               />
@@ -31,15 +48,9 @@ const TeamList = ({ teamList, removeMember }) => {
   );
 };
 
-const ListItem = ({ member, removeMember }) => {
+const ListItem = ({ member, showDialog }) => {
   return (
-    <Animated
-      key={member.code}
-      removeMember={removeMember}
-      animationInDuration={500}
-      animationOut="slideOutUp"
-      animationIn="slideInDown"
-    >
+    <>
       <li
         className="py-3 list-group-item d-flex justify-content-between"
         key={member.code}
@@ -51,13 +62,13 @@ const ListItem = ({ member, removeMember }) => {
         <span>{member.name}</span>
         <span>{member.phone}</span>
         <span
-          onClick={() => removeMember(member.code)}
+          onClick={() => showDialog(member.code)}
           className="remove-btn text-danger"
         >
           <FontAwesomeIcon icon={faXmark} />
         </span>
       </li>
-    </Animated>
+    </>
   );
 };
 

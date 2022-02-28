@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [team, setTeam] = useState([]);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [toast, setToast] = useState('');
 
   useEffect(() => {
     try {
@@ -44,7 +44,10 @@ const Login = () => {
       // remove admin on logout
 
     } else {
-      setError('Invalid code or password')
+      setToast('Invalid code or password')
+      setTimeout(() => {
+        setToast('')
+      }, 3000);
     }
 
     setCode("");
@@ -94,7 +97,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      {error && <Snackbar message={error} />}
+      <Snackbar message={toast} />
     </>
   );
 };
@@ -105,7 +108,7 @@ const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
       <div className="mt-4">
         <input
           id="name"
-          autoComplete="none"
+          autoComplete="off"
           placeholder="Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
@@ -117,6 +120,7 @@ const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
         <input
           id="password"
           value={password}
+          autoComplete="off"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           type="password"

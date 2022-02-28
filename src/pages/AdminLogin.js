@@ -10,7 +10,7 @@ const AdminLogin = ({}) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
     try {
@@ -41,7 +41,10 @@ const AdminLogin = ({}) => {
         console.log(e);
       }
     } else {
-      setError("Invalid code or password");
+      setToast("Invalid code or password");
+      setTimeout(() => {
+        setToast('')
+      }, 3000);
     }
 
     setCode("");
@@ -74,7 +77,7 @@ const AdminLogin = ({}) => {
           </div>
         </div>
       </div>
-      {error && <Snackbar message={error} />}
+      <Snackbar message={toast} />
     </>
   );
 };

@@ -7,6 +7,9 @@ import Login from './pages/login';
 import Team from './pages/admin/Team';
 import Table from './pages/admin/Table';
 import AdminLogin from './pages/AdminLogin'
+import LanguageProvider from './contexts/LanguageContext'
+import LanguageContext from './contexts/LanguageContext'
+import { useContext } from 'react'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmwvHW806lTUQCwi1hU7Zhm6Unabu8LGU",
@@ -24,8 +27,10 @@ export const db = getDatabase(app);
 
 function App() {
 
+  const languageCtx = useContext(LanguageContext);
+  console.log(languageCtx);
   return (
-    <>
+    <LanguageProvider>
       <Router>
         <Routes>
           <Route exact path='/home' 
@@ -40,7 +45,7 @@ function App() {
             element={<Login />} />
         </Routes>
       </Router>
-    </>
+    </LanguageProvider>
   );
 }
 

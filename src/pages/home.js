@@ -15,6 +15,7 @@ function Home() {
   const [toBeRemoved, setToBeRemoved] = useState([]);
   const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
   const [shake, setShake] = useState(false);
+  const [toast, setToast] = useState('');
 
   useEffect(() => {
     readSchedule()
@@ -60,7 +61,11 @@ function Home() {
       }
     })
     update(ref(db), updates).then(res => {
-      console.log(res, 'updated');
+      setToast('Schedule updated')
+      setTimeout(() => {
+        setToast('')
+      }, 3000);
+      setShake('')
     })
   }
 
@@ -89,9 +94,10 @@ function Home() {
   return (
     <>
       {/* <Dialog /> */}
-      <Navbar message={`Welcome ${user.name} `}/>
+      <Navbar message={` ${user.name} `}/>
       <div className="container">
         <div className='row'>
+          <Snackbar pos="middle-center" message={toast} />
           <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
           <List shake={shake} language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>

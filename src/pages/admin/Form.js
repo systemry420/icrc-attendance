@@ -34,7 +34,6 @@ const Form = ({ addMember, list }) => {
       <div className="mt-4">
         <input
           id="id"
-          autoComplete="false"
           value={code}
           disabled={true}
         />
@@ -42,7 +41,7 @@ const Form = ({ addMember, list }) => {
       <div className="mt-4">
         <input
           id="name"
-          autoComplete="false"
+          autoComplete="off"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -53,9 +52,10 @@ const Form = ({ addMember, list }) => {
         <input
           id="phone"
           value={phone}
+          autoComplete="off"
           onChange={(e) => setPhone(e.target.value)}
           placeholder="Phone"
-          type="phone"
+          type="text"
         />
       </div>
   

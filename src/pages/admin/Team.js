@@ -18,6 +18,11 @@ const Team = () => {
   const addMember = (member) => {
     set(ref(db, 'users/' + member.code), member)
       .then(() => {
+        setToast('New member added')
+        setTimeout(() => {
+          setToast('')
+        }, 3000);
+      }).then(() => {
         readTeam()
       })
   }
@@ -26,9 +31,12 @@ const Team = () => {
     set(ref(db, 'users/' + code), null)
     .then(() => {
       setToast('Member removed')
+      setTimeout(() => {
+        setToast('')
+      }, 3000);
+    }).then(() => {
+      readTeam()
     })
-    setToast('')
-    readTeam()
   }
 
   const readTeam = () => {
@@ -58,6 +66,7 @@ const Team = () => {
     <>
       <Navbar pages={pages} />
       <div className="container p-lg-4 p-sm-2">
+      <Snackbar message={toast} pos="middle-center" />
       <div className="fill-form form-box">
         <div className="row">
           <div className="col-2">
@@ -88,7 +97,6 @@ const Team = () => {
                list={teamList} addMember={addMember} />
             ) : ('')
           }
-        {toast && <Snackbar message={toast} /> }
 
           <TeamList 
             removeMember={removeMember} 
