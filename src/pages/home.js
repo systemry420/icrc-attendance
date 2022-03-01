@@ -37,10 +37,10 @@ function Home() {
   }
 
   const removeDate = (id) => {
-    // TODO: alert
-    const toBeRemoved = list.filter(d => d.id === id);
+    setShake(true)
+    const removedItem = list.find(d => d.id === id);
     const updatedList = list.filter(d => d.id !== id);
-    setToBeRemoved(toBeRemoved)
+    setToBeRemoved(prev => [...prev, removedItem])
     setList(updatedList)
   }
 
@@ -51,16 +51,17 @@ function Home() {
     let updates = {}
     toBeRemoved.forEach(day => {
       updates = {...updates,
-        // [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
-        // [`schedule/${monthID}/${day.id}/${user.code}`]: null
+        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
+        [`schedule/${monthID}/${day.id}/${user.code}`]: null
       }
     })
     list.forEach(day => {
       updates = {...updates,
-        // [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
-        // [`schedule/${monthID}/${day.id}/${user.code}`]: user
+        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
+        [`schedule/${monthID}/${day.id}/${user.code}`]: user
       }
     })
+
     update(ref(db), updates).then(res => {
       setToast('Schedule updated')
       setTimeout(() => {
@@ -75,7 +76,7 @@ function Home() {
     setList([])
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
-    onValue(ref(db, `users_dates/${member.code}/dates/${'monthID'}`), snapshot => {
+    onValue(ref(db, `users_dates/${member.code}/dates/${monthID}`), snapshot => {
       const days = snapshot.val()
       if (days) {
         daysList = (Object.keys(days).map(key => {

@@ -14,7 +14,7 @@ function List({ shake, list, removeDate, saveSchedule, language }) {
           <input
             type="button"
             onClick={() => saveSchedule()}
-            value={language.strings[language.current]["save"]}
+            value={'Save'}
             style={{ padding: ".4em" }}
             className={`button ${shake ? 'shake' : ''}`}
           />
