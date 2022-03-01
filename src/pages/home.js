@@ -13,7 +13,7 @@ function Home() {
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [toBeRemoved, setToBeRemoved] = useState([]);
-  const monthID = `${(new Date().getMonth() + 1).toString()}_${new Date().getFullYear()}`
+  const monthID = `${(new Date().getMonth()).toString()}_${new Date().getFullYear()}`
   const [shake, setShake] = useState(false);
   const [toast, setToast] = useState('');
 

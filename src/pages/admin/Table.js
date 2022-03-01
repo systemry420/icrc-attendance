@@ -9,16 +9,26 @@ const Table = () => {
   const [daysList, setDaysList] = useState([]);
   const pages = ['table', 'team'];
   const [dailyList, setDailyList] = useState([]);
-  const [monthID, setMonthID] = useState(`${+(new Date().getMonth()).toString()}_${+new Date().getFullYear()}`)
 
-  const readSchedule = () => {
-    setDaysList(getDaysInMonth(+monthID.split('_')[0], +monthID.split('_')[1]))
-    localStorage.setItem('daysList', JSON.stringify(daysList))
+  useEffect(() => {
+    readSchedule(new Date())
+    return () => {
+      // setDaysList([])
+      // setDailyList([])
+      // setMonthID('')
+      readSchedule(new Date())
+    };
+  }, []);
+
+  const readSchedule = (date) => {
+    let monthID = `${(date.getMonth()).toString()}_${(date).getFullYear()}`
+    setDaysList(getDaysInMonth(date.getMonth(), date.getFullYear()))
+    // localStorage.setItem(`daysList${'monthID'}`, JSON.stringify(daysList))
     
-    let daily = localStorage.getItem('dailyList')
-    if (daily) {
-      setDailyList(JSON.parse(daily))
-    } else {
+    // let daily = localStorage.getItem(`daysList${'monthID'}`)
+    // if (daily) {
+    //   setDailyList(JSON.parse(daily))
+    // } else {
       let list, users;
       try {
         onValue(ref(db, `schedule/${monthID}`), async snapshot => {
@@ -31,17 +41,17 @@ const Table = () => {
               return {day: key, users}
             }) 
             setDailyList(list);
-            localStorage.setItem('daylyList', JSON.stringify(list))
+            // localStorage.setItem(`daysList${'monthID'}`, JSON.stringify(list))
           }
         })
       } catch (e) {}
-    }
+    // }
   }
 
-  function getDaysInMonth(month, year) {
+  const getDaysInMonth = (month, year) => {
     var date = new Date(year, month, 1); 
     var days = [];
-    while (date.getMonth() === month) {
+    while ((date.getMonth()) === month) {
       days.push(
         {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
           id: new Date(date).getTime().toString()
@@ -51,25 +61,13 @@ const Table = () => {
     return days;
   }
 
-  useEffect(() => {
-    readSchedule()
-    return () => {
-      setDaysList([])
-    };
-  }, [monthID]); 
-
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
-      name: `table_${monthID}.xlsx`,
+      name: `table_${'monthID'}.xlsx`,
       sheet: {
         name: 'Sheet 2_2022'
       }
     })
-  }
-
-  const onSelectDay = (date) => {
-    let d = `${(new Date(date).getMonth()).toString()}_${new Date(date).getFullYear()}`
-    setMonthID(d)
   }
 
   let team = daysList.map(day => {
@@ -85,10 +83,10 @@ const Table = () => {
         </th>
     )
     return(
-      <tr data-height='40' key={'tr' + day.id}>
+      <tr data-height='30' key={'tr' + day.id}>
         {dayJSX}
-        {dailyList.map(item => {
-          return item['users'].map(user => {
+        {(dailyList.length > 0) && dailyList.map((item, idx) => {
+          return item['users'] && item['users'].map(user => {
             if (item.day === day.id) {
               return (
                 <td
@@ -114,7 +112,7 @@ const Table = () => {
       <div className="container p-3">
       <Calendar 
         maxDetail='year'
-        onSelectDay={onSelectDay} 
+        onSelectDay={readSchedule} 
         />
         <div className="row">
           <h1 className="col-6">Table</h1>
