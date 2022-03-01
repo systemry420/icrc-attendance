@@ -16,16 +16,16 @@ const Login = () => {
   const [toast, setToast] = useState('');
 
   useEffect(() => {
-    try {
-      let user = JSON.parse(localStorage.getItem('user'))
-      if (user) {
-        navigate('/home')
-      }
-    } catch(e) {
-        console.log(e);
-    }
-    return () => {
-    };
+    // try {
+    //   let user = JSON.parse(localStorage.getItem('user'))
+    //   if (user) {
+    //     navigate('/home')
+    //   }
+    // } catch(e) {
+    //     console.log(e);
+    // }
+    // return () => {
+    // };
   }, []);
 
   const handleSubmit = (e) => {

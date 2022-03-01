@@ -17,6 +17,7 @@ function Home() {
   const [shake, setShake] = useState(false);
   const [toast, setToast] = useState('');
 
+
   useEffect(() => {
     readSchedule()
     return () => {
@@ -50,14 +51,14 @@ function Home() {
     let updates = {}
     toBeRemoved.forEach(day => {
       updates = {...updates,
-        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
-        [`schedule/${monthID}/${day.id}/${user.code}`]: null
+        // [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
+        // [`schedule/${monthID}/${day.id}/${user.code}`]: null
       }
     })
     list.forEach(day => {
       updates = {...updates,
-        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
-        [`schedule/${monthID}/${day.id}/${user.code}`]: user
+        // [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
+        // [`schedule/${monthID}/${day.id}/${user.code}`]: user
       }
     })
     update(ref(db), updates).then(res => {
@@ -74,7 +75,7 @@ function Home() {
     setList([])
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
-    onValue(ref(db, `users_dates/${member.code}/dates/${monthID}`), snapshot => {
+    onValue(ref(db, `users_dates/${member.code}/dates/${'monthID'}`), snapshot => {
       const days = snapshot.val()
       if (days) {
         daysList = (Object.keys(days).map(key => {
@@ -82,6 +83,7 @@ function Home() {
         }))
       }
       setList(daysList);
+      // cache
     })
   }
 
@@ -98,7 +100,7 @@ function Home() {
       <div className="container">
         <div className='row'>
           <Snackbar pos="middle-center" message={toast} />
-          <Calendar language={language} list={list} onSelectDay={onSelectDay}/>
+          <Calendar showNavigation={false} language={language} list={list} onSelectDay={onSelectDay}/>
           <List shake={shake} language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>
       </div>

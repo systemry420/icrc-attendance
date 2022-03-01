@@ -7,14 +7,14 @@ const Form = ({ addMember, list }) => {
 
     useEffect(() => {
       if (list.length === 0) {
-        setCode('CRL001')
+        setCode('CRL01')
       } else {
         let lastUser = list[list.length - 1]['code']
         let lastCode = +lastUser.substring(lastUser.indexOf('L') + 1)
         if (lastCode >= 9) {
-          setCode(`CRL0${lastCode + 1}`)
+          setCode(`CRL${lastCode + 1}`)
         } else {
-          setCode(`CRL00${lastCode + 1}`)
+          setCode(`CRL0${lastCode + 1}`)
         }
       }
       return () => {

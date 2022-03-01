@@ -13,15 +13,15 @@ const AdminLogin = ({}) => {
   const [toast, setToast] = useState("");
 
   useEffect(() => {
-    try {
-      let admin = JSON.parse(localStorage.getItem("admin"));
-      if (admin) {
-        navigate("/team");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    return () => {};
+    // try {
+    //   let admin = JSON.parse(localStorage.getItem("admin"));
+    //   if (admin) {
+    //     navigate("/team");
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
+    // return () => {};
   }, []);
 
   const handleSubmit = (e) => {
@@ -31,7 +31,7 @@ const AdminLogin = ({}) => {
     if (code === "AD1" && password === "123456") {
       member = { code, password };
       localStorage.setItem("admin", JSON.stringify(member));
-      navigate("/team");
+      navigate("/table");
       try {
         let user = JSON.parse(localStorage.getItem("user"));
         if (user) {
@@ -88,7 +88,7 @@ const Form = ({ code, setCode, password, setPassword, handleSubmit }) => {
       <div className="mt-4">
         <input
           id="name"
-          autoComplete="none"
+          autoComplete="off"
           placeholder="Username"
           value={code}
           onChange={(e) => setCode(e.target.value)}

@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import '../index.css';
 
 
-function Calendar({ onSelectDay, maxDetail = 'month' }){
+function Calendar({ showNavigation, onSelectDay, maxDetail = 'month' }){
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
@@ -13,6 +13,7 @@ function Calendar({ onSelectDay, maxDetail = 'month' }){
       <Cal 
         className="w-100"
         value={selectedDate} 
+        showNavigation={showNavigation}
         onChange={(value) => onSelectDay(value)}
         maxDetail={maxDetail}
       />

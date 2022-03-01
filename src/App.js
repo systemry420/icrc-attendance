@@ -12,13 +12,14 @@ import LanguageContext from './contexts/LanguageContext'
 import { useContext } from 'react'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAmwvHW806lTUQCwi1hU7Zhm6Unabu8LGU",
-  authDomain: "drr305-0.firebaseapp.com",
-  projectId: "drr305-0",
-  storageBucket: "drr305-0.appspot.com",
-  messagingSenderId: "406102692288",
-  appId: "1:406102692288:web:cc737992a04c231ed93825",
-  measurementId: "G-ZDXFLCHGPJ"
+  apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
+  authDomain: "icrc-attend.firebaseapp.com",
+  databaseURL: "https://icrc-attend-default-rtdb.firebaseio.com",
+  projectId: "icrc-attend",
+  storageBucket: "icrc-attend.appspot.com",
+  messagingSenderId: "953233861572",
+  appId: "1:953233861572:web:15547fcf7d6581f0d99291",
+  measurementId: "G-3RR4L3B4MG"
 };
 
 // Initialize Firebase

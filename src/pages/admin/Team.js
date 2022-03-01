@@ -5,14 +5,14 @@ import Form from "./Form";
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { ref, set, onValue, orderByChild } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 import Snackbar from "../../components/Snackbar";
 
 const Team = () => {
   const [showForm, setShowForm] = useState(false);
   const [teamList, setTeamList] = useState([]);
   const [addIcon, setAddIcon] = useState(faPlus);
-  const pages = ['team', 'table'];
+  const pages = ['table', 'team'];
   const [toast, setToast] = useState("");
 
   const addMember = (member) => {
@@ -28,29 +28,61 @@ const Team = () => {
   }
 
   const removeMember = (code) => {
-    set(ref(db, 'users/' + code), null)
-    .then(() => {
-      readTeam()
-    }).then(() => {
-      setToast('Member removed')
-      setTimeout(() => {
-        setToast('')
-      }, 3000);
-    })
+    // set(ref(db, 'users/' + code), null)
+    // .then(() => {
+    //   readTeam()
+    // }).then(() => {
+    //   setToast('Member removed')
+    //   setTimeout(() => {
+    //     setToast('')
+    //   }, 3000);
+    // })
+    removeMemberSchedule(code)
+  }
+
+  const removeMemberSchedule = code => {
+    // let list = JSON.parse(daysList)
+    // list.forEach(day => {
+    //   updates = {...updates,
+    //     [`users_dates/${code}/dates/${monthID}/${day.id}`]: null,
+    //     [`schedule/${monthID}/${day.id}/${code}`]: null
+    //   }
+    // })
+    try {
+      let monthsList = []
+      onValue(ref(db, 'schedule'), snapshot => {
+        if (snapshot.val()) {
+          monthsList = Object.keys(snapshot.val()).map(key => {
+            console.log(key);
+            return snapshot.val()[key]
+          })
+
+          monthsList.forEach(monthDays => {
+            console.log(monthDays);
+          })
+        }
+      })
+    } catch(e) {}
   }
 
   const readTeam = () => {
-    let list = []
-    try {
-      onValue(ref(db, 'users'), snapshot => {
-        if (snapshot.val()) {
-          list = Object.keys(snapshot.val()).map(key => {
-            return snapshot.val()[key]
-          })
-        }
-        setTeamList(list)
-      })
-    } catch(e) {}
+    let team = localStorage.getItem('teamList')
+    if (team) {
+      setTeamList(JSON.parse(team))
+    } else {
+      let list = []
+      try {
+        onValue(ref(db, 'users'), snapshot => {
+          if (snapshot.val()) {
+            list = Object.keys(snapshot.val()).map(key => {
+              return snapshot.val()[key]
+            })
+          }
+          setTeamList(list)
+          localStorage.setItem('teamList', JSON.stringify(list))
+        })
+      } catch(e) {}
+    }
   }
 
   useEffect(() => {

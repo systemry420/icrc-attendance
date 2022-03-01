@@ -7,25 +7,35 @@ import Calendar from '../../components/Calendar';
 
 const Table = () => {
   const [daysList, setDaysList] = useState([]);
-  const pages = ['team', 'table'];
+  const pages = ['table', 'team'];
   const [dailyList, setDailyList] = useState([]);
   const [monthID, setMonthID] = useState(`${+(new Date().getMonth()).toString()}_${+new Date().getFullYear()}`)
 
   const readSchedule = () => {
     setDaysList(getDaysInMonth(+monthID.split('_')[0], +monthID.split('_')[1]))
-    let list, users;
-    onValue(ref(db, `schedule/${monthID}`), async snapshot => {
-      const days = await snapshot.val()
-      if (days) {
-        list = Object.keys(days).map(key => {
-          users = Object.keys(days[key]).map(k => {
-            return days[key][k]
-          })
-          return {day: key, users}
-        }) 
-        setDailyList(list);
-      }
-    })
+    localStorage.setItem('daysList', JSON.stringify(daysList))
+    
+    let daily = localStorage.getItem('dailyList')
+    if (daily) {
+      setDailyList(JSON.parse(daily))
+    } else {
+      let list, users;
+      try {
+        onValue(ref(db, `schedule/${monthID}`), async snapshot => {
+          const days = await snapshot.val()
+          if (days) {
+            list = Object.keys(days).map(key => {
+              users = Object.keys(days[key]).map(k => {
+                return days[key][k]
+              })
+              return {day: key, users}
+            }) 
+            setDailyList(list);
+            localStorage.setItem('daylyList', JSON.stringify(list))
+          }
+        })
+      } catch (e) {}
+    }
   }
 
   function getDaysInMonth(month, year) {
@@ -50,7 +60,7 @@ const Table = () => {
 
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
-      name: 'table_2_2022.xlsx',
+      name: `table_${monthID}.xlsx`,
       sheet: {
         name: 'Sheet 2_2022'
       }
