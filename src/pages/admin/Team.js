@@ -5,7 +5,7 @@ import Form from "./Form";
 import { db } from '../../App'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { ref, set, onValue } from "firebase/database";
+import { ref, set, onValue, update, remove } from "firebase/database";
 import Snackbar from "../../components/Snackbar";
 
 const Team = () => {
@@ -28,48 +28,58 @@ const Team = () => {
   }
 
   const removeMember = (code) => {
-    // set(ref(db, 'users/' + code), null)
-    // .then(() => {
-    //   readTeam()
-    // }).then(() => {
-    //   setToast('Member removed')
-    //   setTimeout(() => {
-    //     setToast('')
-    //   }, 3000);
-    // })
-    removeMemberSchedule(code)
+    set(ref(db, 'users/' + code), null)
+    .then(() => {
+      removeMemberSchedule(code)
+      removeMemberDates(code)
+      readTeam()
+    }).then(() => {
+      setToast('Member removed')
+      setTimeout(() => {
+        setToast('')
+      }, 3000);
+    })
   }
 
+  const removeMemberDates = (code) => {
+    set(ref(db, 'users_dates/' + code), null)
+  }
+
+
   const removeMemberSchedule = code => {
-    // let list = JSON.parse(daysList)
-    // list.forEach(day => {
-    //   updates = {...updates,
-    //     [`users_dates/${code}/dates/${monthID}/${day.id}`]: null,
-    //     [`schedule/${monthID}/${day.id}/${code}`]: null
-    //   }
-    // })
     try {
-      let monthsList = []
+      let updates = {}, months = []
       onValue(ref(db, 'schedule'), snapshot => {
         if (snapshot.val()) {
-          monthsList = Object.keys(snapshot.val()).map(key => {
+          months = Object.keys(snapshot.val()).map(key => {
             console.log(key);
+            // remove(ref(db, (key) + '/1646344800000/' + code))
             return snapshot.val()[key]
           })
-
-          monthsList.forEach(monthDays => {
-            console.log(monthDays);
+        }
+        console.log(months);
+        for (let i = 0; i < months.length; i++) {
+          const month = months[i];
+          Object.keys(month).forEach(key => {
+            console.log(key);
+            updates[`schedule/${key}/`] = null
           })
         }
+        
+        console.log(updates);
+        update(ref(db, updates)).then(() => {
+          console.log('del');
+        })
       })
-    } catch(e) {}
+
+    } catch(e) { }
   }
 
   const readTeam = () => {
     let team = localStorage.getItem('teamList')
-    if (team) {
-      setTeamList(JSON.parse(team))
-    } else {
+    // if (team) {
+    //   setTeamList(JSON.parse(team))
+    // } else {
       let list = []
       try {
         onValue(ref(db, 'users'), snapshot => {
@@ -82,7 +92,7 @@ const Team = () => {
           localStorage.setItem('teamList', JSON.stringify(list))
         })
       } catch(e) {}
-    }
+    // }
   }
 
   useEffect(() => {

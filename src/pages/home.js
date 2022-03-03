@@ -4,7 +4,6 @@ import List from '../components/List';
 import Navbar from '../components/Navbar';
 import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
-import Dialog from '../components/Dialog';
 import Snackbar from '../components/Snackbar';
 import { ref, onValue, update } from "firebase/database";
 
@@ -76,16 +75,18 @@ function Home() {
     setList([])
     const member = JSON.parse(localStorage.getItem('user'))
     setUser(member)
-    onValue(ref(db, `users_dates/${member.code}/dates/${monthID}`), snapshot => {
-      const days = snapshot.val()
-      if (days) {
-        daysList = (Object.keys(days).map(key => {
-          return days[key]
-        }))
-      }
-      setList(daysList);
-      // cache
-    })
+    try {
+      onValue(ref(db, `users_dates/${member.code}/dates/${monthID}`), snapshot => {
+        const days = snapshot.val()
+        if (days) {
+          daysList = (Object.keys(days).map(key => {
+            return days[key]
+          }))
+        }
+        setList(daysList);
+        // cache
+      })
+    } catch (e) { }
   }
 
   function formatDate(day) {
@@ -96,7 +97,6 @@ function Home() {
 
   return (
     <>
-      {/* <Dialog /> */}
       <Navbar message={` ${user.name} `}/>
       <div className="container">
         <div className='row'>
