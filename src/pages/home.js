@@ -40,24 +40,28 @@ function Home() {
     const removedItem = list.find(d => d.id === id);
     const updatedList = list.filter(d => d.id !== id);
     setToBeRemoved(prev => [...prev, removedItem])
+    console.log(toBeRemoved);
+    console.log(updatedList);
     setList(updatedList)
   }
 
   const saveSchedule = () => {
-    if (list.length === 0) {
-      return;
-    }
     let updates = {}
+    setShake(false)
+
+    if (list.length > 0) {
+      list.forEach(day => {
+        updates = {...updates,
+          [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
+          [`schedule/${monthID}/${day.id}/${user.code}`]: user
+        }
+      })
+    } 
+
     toBeRemoved.forEach(day => {
       updates = {...updates,
         [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: null,
         [`schedule/${monthID}/${day.id}/${user.code}`]: null
-      }
-    })
-    list.forEach(day => {
-      updates = {...updates,
-        [`users_dates/${user.code}/dates/${monthID}/${day.id}`]: day,
-        [`schedule/${monthID}/${day.id}/${user.code}`]: user
       }
     })
 
@@ -66,7 +70,6 @@ function Home() {
       setTimeout(() => {
         setToast('')
       }, 3000);
-      setShake('')
     })
   }
 
@@ -82,11 +85,15 @@ function Home() {
           daysList = (Object.keys(days).map(key => {
             return days[key]
           }))
+          setList(daysList);
+        } else {
+          setList([])
         }
-        setList(daysList);
         // cache
       })
     } catch (e) { }
+
+    setToBeRemoved([])
   }
 
   function formatDate(day) {
