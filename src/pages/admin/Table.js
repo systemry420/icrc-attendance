@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar';
 import TableToExcel from '@linways/table-to-excel'
 import { onValue, ref } from 'firebase/database' 
 import Calendar from '../../components/Calendar';
+import moment from 'moment'
 
 const Table = () => {
   const [daysList, setDaysList] = useState([]);
@@ -52,9 +53,11 @@ const Table = () => {
     var date = new Date(year, month, 1); 
     var days = [];
     while ((date.getMonth()) === month) {
+      const formattedDay = moment(date).format('dddd D')
+
       days.push(
-        {string: new Date(date).toString().substring(0, new Date(date).toString().indexOf(year)), 
-          id: new Date(date).getTime().toString()
+        {string: formattedDay, 
+          id: moment(date).format('DMMYYYY')
         });
       date.setDate(date.getDate() + 1);
     }
@@ -63,10 +66,7 @@ const Table = () => {
 
   const convertTable = () => {
     TableToExcel.convert(document.getElementById('table1'), {
-      name: `table_${'monthID'}.xlsx`,
-      sheet: {
-        name: 'Sheet 2_2022'
-      }
+      name: `${moment().format('MMMM-YYYY')}.xlsx`,
     })
   }
 

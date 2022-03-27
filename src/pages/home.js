@@ -6,6 +6,7 @@ import { db } from '../App'
 import { LanguageReducer, languageState as lang } from '../reducers/Language';
 import Snackbar from '../components/Snackbar';
 import { ref, onValue, update } from "firebase/database";
+import moment from 'moment'
 
 function Home() {
   const [language, dispatch] = useReducer(LanguageReducer, lang)
@@ -35,13 +36,17 @@ function Home() {
     setList([...list, selectedDate])
   }
 
+  function formatDate(day) {
+    const formattedDay = moment(day).format('dddd D')
+    const id = moment(day).format('DMMYYYY')
+    return { id, day: formattedDay}
+  }
+
   const removeDate = (id) => {
     setShake(true)
     const removedItem = list.find(d => d.id === id);
     const updatedList = list.filter(d => d.id !== id);
     setToBeRemoved(prev => [...prev, removedItem])
-    console.log(toBeRemoved);
-    console.log(updatedList);
     setList(updatedList)
   }
 
@@ -94,12 +99,6 @@ function Home() {
     } catch (e) { }
 
     setToBeRemoved([])
-  }
-
-  function formatDate(day) {
-    const selectedDay = new Date(day).toString();
-    const formattedDay = selectedDay.substring(0, selectedDay.indexOf('00'))
-    return { id: new Date(formattedDay).getTime(), day: formattedDay}
   }
 
   return (
