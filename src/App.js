@@ -13,14 +13,14 @@ import { useContext } from 'react'
 import { ThemeProvider, ThemeCtx } from './contexts/ThemeCtx';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
-  authDomain: "icrc-attend.firebaseapp.com",
-  databaseURL: "https://icrc-attend-default-rtdb.firebaseio.com",
-  projectId: "icrc-attend",
-  storageBucket: "icrc-attend.appspot.com",
-  messagingSenderId: "953233861572",
-  appId: "1:953233861572:web:84a5683443beadded99291",
-  measurementId: "G-B8HLYYFL83"
+  apiKey: "AIzaSyAmwvHW806lTUQCwi1hU7Zhm6Unabu8LGU",
+  authDomain: "drr305-0.firebaseapp.com",
+  databaseURL: "https://drr305-0-default-rtdb.firebaseio.com",
+  projectId: "drr305-0",
+  storageBucket: "drr305-0.appspot.com",
+  messagingSenderId: "406102692288",
+  appId: "1:406102692288:web:cc737992a04c231ed93825",
+  measurementId: "G-ZDXFLCHGPJ"
 };
 
 const app = initializeApp(firebaseConfig);
