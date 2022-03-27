@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin'
 import LanguageProvider from './contexts/LanguageContext'
 import LanguageContext from './contexts/LanguageContext'
 import { useContext } from 'react'
+import { ThemeProvider, ThemeCtx } from './contexts/ThemeCtx';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjdQ7eFk1mBCFQGomzGBVQDN17WFYQVok",
@@ -26,27 +27,34 @@ const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 
 function App() {
-
-  const languageCtx = useContext(LanguageContext);
-  console.log(languageCtx);
   return (
-    <LanguageProvider>
-      <Router>
-        <Routes>
-          <Route exact path='/home' 
-            element={<Home />}></Route>
-          <Route path='/admin-login' 
-            element={<AdminLogin />}></Route>
-          <Route path='/team' 
-            element={<Team />}></Route>
-          <Route path='/table'
-            element={<Table />}></Route>
-          <Route path='*'
-            element={<Login />} />
-        </Routes>
-      </Router>
-    </LanguageProvider>
+    <ThemeProvider>
+      <Main />
+    </ThemeProvider>
   );
+}
+
+function Main () {
+  const themeCtx = useContext(ThemeCtx);
+
+  return (
+    <div>
+    <Router>
+      <Routes>
+        <Route exact path='/home' 
+          element={<Home />}></Route>
+        <Route path='/admin-login' 
+          element={<AdminLogin />}></Route>
+        <Route path='/team' 
+          element={<Team />}></Route>
+        <Route path='/table'
+          element={<Table />}></Route>
+        <Route path='*'
+          element={<Login />} />
+      </Routes>
+    </Router>
+    </div>
+  )
 }
 
 export default App;

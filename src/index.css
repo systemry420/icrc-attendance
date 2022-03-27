@@ -1,6 +1,18 @@
+.dark-theme {
+  --text-color: #eee;
+  --bg-color: #262626;
+}
+
+.light-theme {
+  --text-color: #222;
+  --bg-color: #eee;
+}
+
 * {
   padding: 0;
   margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 body {
