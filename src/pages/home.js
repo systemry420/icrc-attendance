@@ -13,19 +13,21 @@ function Home() {
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [toBeRemoved, setToBeRemoved] = useState([]);
-  const monthID = `${(new Date().getMonth()).toString()}_${new Date().getFullYear()}`
+  const [monthID, setMonthID] = useState(`${(new Date().getMonth()).toString()}_${new Date().getFullYear()}`)
   const [shake, setShake] = useState(false);
   const [toast, setToast] = useState('');
-
+  const maxDate=new Date(`2022-${new Date().getMonth() + 2}-31`)
 
   useEffect(() => {
     readSchedule()
     return () => {
     };
-  }, []);
+  }, [monthID]);
 
   const onSelectDay = (day) => {
     setShake(true)
+    setMonthID(`${(new Date(day).getMonth()).toString()}_${new Date(day).getFullYear()}`)
+
     const selectedDate = formatDate(day)
     for (let i = 0; i < list.length; i++) {
       const element = list[i];
@@ -33,11 +35,11 @@ function Home() {
         return;
       }
     }
-    setList([...list, selectedDate])
+    setList([selectedDate, ...list])
   }
 
   function formatDate(day) {
-    const formattedDay = moment(day).format('dddd D')
+    const formattedDay = moment(day).format('dddd MMM D')
     const id = moment(day).format('DMMYYYY')
     return { id, day: formattedDay}
   }
@@ -107,7 +109,7 @@ function Home() {
       <div className="container">
         <div className='row'>
           <Snackbar pos="middle-center" message={toast} />
-          <Calendar showNavigation={false} language={language} list={list} onSelectDay={onSelectDay}/>
+          <Calendar min={new Date()} max={maxDate} showNavigation={false} language={language} list={list} onSelectDay={onSelectDay}/>
           <List shake={shake} language={language} list={list} saveSchedule={saveSchedule} removeDate={removeDate} />
         </div>
       </div>

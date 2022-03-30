@@ -6,18 +6,18 @@ import 'react-calendar/dist/Calendar.css';
 import '../index.css';
 
 
-function Calendar({ showNavigation, onSelectDay, maxDetail = 'month' }){
+function Calendar({ min, max, showNavigation, onSelectDay, maxDetail = 'month' }){
   const [selectedDate, setSelectedDate] = useState(null);
-
   return (
     <div className='mt-1 mb-4 col-12 justify-center align-center'>
-      <h1>{moment(new Date()).format('MMMM')}</h1>
       <Cal 
         className="w-100"
         value={selectedDate} 
         showNavigation={showNavigation}
+        minDate={min}
+        maxDate={max}
         onChange={(value) => onSelectDay(value)}
-        showNeighboringMonth={false}
+        // showNeighboringMonth={false}
         maxDetail={maxDetail}
       />
     </div>

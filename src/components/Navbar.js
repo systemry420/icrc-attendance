@@ -54,9 +54,9 @@ function Navbar({message, pages = [] }) {
             <FontAwesomeIcon icon={faCog} style={{fontSize: '1.4em', color: 'Navy'}} />
           </span>
           {showDropdown && <div className='dropdown-menu' style={{display: 'block', position: 'absolute', right: '0px'}}>
-            <button className='dropdown-item' onClick={switchTheme}>
+            {/* <button className='dropdown-item' onClick={switchTheme}>
               Switch Theme
-            </button>
+            </button> */}
             <button className='dropdown-item' onClick={logout}>
               Logout
             </button>
